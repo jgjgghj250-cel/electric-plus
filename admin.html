@@ -1,130 +1,83 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>پنل مدیریت الکتریک پلاس</title>
-  <style>
-    body {
-      font-family: Tahoma, Arial, sans-serif;
-      background: #f1f5f9;
-      color: #172033;
-      margin: 0;
-      padding: 16px;
-    }
-    .container {
-      max-width: 900px;
-      margin: auto;
-    }
-    .box {
-      background: white;
-      padding: 18px;
-      margin-bottom: 16px;
-      border-radius: 12px;
-      box-shadow: 0 3px 12px #0001;
-    }
-    h1, h2 { margin-top: 0; }
-    input, textarea, select, button {
-      font: inherit;
-      width: 100%;
-      box-sizing: border-box;
-      padding: 11px;
-      margin: 6px 0 12px;
-      border-radius: 8px;
-      border: 1px solid #cbd5e1;
-    }
-    button {
-      background: #2563eb;
-      color: white;
-      border: 0;
-      cursor: pointer;
-    }
-    button.delete { background: #dc2626; }
-    button.gray { background: #64748b; }
-    .message {
-      padding: 12px;
-      background: #e0f2fe;
-      border-radius: 8px;
-      margin-bottom: 12px;
-      overflow-wrap: anywhere;
-    }
-    .hidden { display: none; }
-    .product {
-      border: 1px solid #e2e8f0;
-      padding: 12px;
-      border-radius: 9px;
-      margin: 10px 0;
-      overflow-wrap: anywhere;
-    }
-    .product button { margin-bottom: 0; }
-    .hint { color: #64748b; font-size: 13px; line-height: 1.8; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>پنل مدیریت الکتریک پلاس</title>
+<style>
+body{font-family:Tahoma,Arial,sans-serif;background:#f1f5f9;color:#172033;margin:0;padding:15px}
+main{max-width:850px;margin:auto}
+.box{background:white;padding:18px;margin-bottom:16px;border-radius:12px;box-shadow:0 3px 12px #0001}
+input,textarea,select,button{font:inherit;box-sizing:border-box;width:100%;padding:11px;margin:6px 0 12px;border:1px solid #cbd5e1;border-radius:8px}
+button{background:#2563eb;color:white;border:0;cursor:pointer}
+.delete{background:#dc2626}.gray{background:#64748b}
+.message{padding:12px;border-radius:8px;background:#e0f2fe;margin:12px 0;overflow-wrap:anywhere;white-space:pre-wrap}
+.hidden{display:none!important}
+.product{border:1px solid #e2e8f0;padding:12px;border-radius:9px;margin:10px 0;overflow-wrap:anywhere}
+.hint{color:#64748b;font-size:13px;line-height:1.8}
+</style>
 </head>
 <body>
-<div class="container">
-  <h1>پنل مدیریت الکتریک پلاس</h1>
-  <div id="message" class="message">برای مدیریت محصولات وارد حساب مدیر شوید.</div>
+<main>
+<h1>پنل مدیریت الکتریک پلاس</h1>
+<div id="message" class="message">برای مدیریت محصولات وارد حساب مدیر شوید.</div>
 
-  <section id="loginBox" class="box">
-    <h2>ورود مدیر</h2>
-    <form id="loginForm">
-      <label for="email">ایمیل مدیر</label>
-      <input id="email" type="email" autocomplete="username" required>
+<section id="loginBox" class="box">
+<h2>ورود مدیر</h2>
+<form id="loginForm">
+<label>ایمیل مدیر</label>
+<input id="email" type="email" autocomplete="username" required>
+<label>رمز عبور</label>
+<input id="password" type="password" autocomplete="current-password" required>
+<button type="submit">ورود</button>
+</form>
+<p class="hint">از حساب مدیر ثبت‌شده در Supabase استفاده کنید. رمز خود را به کسی ندهید.</p>
+</section>
 
-      <label for="password">رمز عبور</label>
-      <input id="password" type="password" autocomplete="current-password" required>
+<section id="adminBox" class="hidden">
+<div class="box">
+<button id="logoutButton" class="gray" type="button">خروج از حساب</button>
+<h2 id="formHeading">افزودن محصول جدید</h2>
+<form id="productForm">
+<input id="productId" type="hidden">
 
-      <button type="submit">ورود</button>
-    </form>
-    <p class="hint">برای ورود از همان حساب مدیر Supabase استفاده کنید.</p>
-  </section>
+<label>نام محصول *</label>
+<input id="name" required>
 
-  <section id="adminBox" class="hidden">
-    <div class="box">
-      <button id="logoutButton" class="gray" type="button">خروج از حساب</button>
-      <h2 id="formHeading">افزودن محصول جدید</h2>
+<label>قیمت به تومان *</label>
+<input id="price" type="number" min="0" step="1" required>
 
-      <form id="productForm">
-        <input id="productId" type="hidden">
+<label>دسته‌بندی</label>
+<input id="category" placeholder="مثلاً روشنایی">
 
-        <label for="name">نام محصول *</label>
-        <input id="name" required>
+<label>موجودی</label>
+<input id="stock" type="number" min="0" step="1" value="0">
 
-        <label for="price">قیمت به تومان *</label>
-        <input id="price" type="number" min="0" step="1" required>
+<label>توضیحات</label>
+<textarea id="desc" rows="4"></textarea>
 
-        <label for="cate">دسته‌بندی</label>
-        <input id="cate" placeholder="مثلاً روشنایی">
+<label>نشانی اینترنتی تصویر</label>
+<input id="imag" type="url" placeholder="https://...">
 
-        <label for="stock">موجودی</label>
-        <input id="stock" type="number" min="0" step="1" value="0">
+<label>وضعیت محصول</label>
+<select id="active">
+<option value="true">فعال و قابل نمایش</option>
+<option value="false">غیرفعال</option>
+</select>
 
-        <label for="desc">توضیحات محصول</label>
-        <textarea id="desc" rows="4"></textarea>
-
-        <label for="imag">نشانی اینترنتی عکس محصول</label>
-        <input id="imag" type="url" placeholder="https://...">
-
-        <label for="active">وضعیت محصول</label>
-        <select id="active">
-          <option value="true">فعال و قابل نمایش</option>
-          <option value="false">غیرفعال</option>
-        </select>
-
-        <button type="submit" id="saveButton">ذخیره محصول</button>
-        <button type="button" id="cancelButton" class="gray hidden">لغو ویرایش</button>
-      </form>
-
-      <p class="hint">در این نسخه، عکس با نشانی اینترنتی ثبت می‌شود؛ آپلود مستقیم عکس را بعداً تنظیم می‌کنیم.</p>
-    </div>
-
-    <div class="box">
-      <h2>محصولات فروشگاه</h2>
-      <button id="refreshButton" type="button">بارگذاری محصولات</button>
-      <div id="products">در حال آماده‌سازی...</div>
-    </div>
-  </section>
+<button id="saveButton" type="submit">ذخیره محصول</button>
+<button id="cancelButton" type="button" class="gray hidden">لغو ویرایش</button>
+</form>
+<p class="hint">در این نسخه، تصویر با نشانی اینترنتی ثبت می‌شود. آپلود مستقیم عکس را می‌توان جداگانه اضافه کرد.</p>
 </div>
+
+<div class="box">
+<h2>نمایش محصولات</h2>
+<button id="refreshButton" type="button">بارگذاری دوباره</button>
+<div id="products">در حال آماده‌سازی...</div>
+</div>
+</section>
+</main>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
@@ -132,10 +85,9 @@
   const SUPABASE_URL = 'https://loqivxvhwbkxorsoryyu.supabase.co';
   const SUPABASE_KEY = 'sb_publishable_SAgY0gPoQaZIFdrc39bWgw_YLreqqie';
   const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
   const $ = id => document.getElementById(id);
 
-  function showMessage(text, error = false) {
+  function message(text, error=false) {
     $('message').textContent = text;
     $('message').style.background = error ? '#fee2e2' : '#e0f2fe';
   }
@@ -158,14 +110,13 @@
   async function loadProducts() {
     $('products').textContent = 'در حال بارگذاری محصولات...';
 
-    const { data, error } = await db
-      .from('products')
-      .select('id,name,price,cate,stock,desc,imag,is_active')
-      .order('created_at', { ascending: false });
+    const {data, error} = await db.from('products')
+      .select('id,name,price,category,stock,desc,imag,is_active,created_at')
+      .order('created_at', {ascending:false});
 
     if (error) {
       $('products').textContent = 'خطا در دریافت محصولات: ' + error.message;
-      showMessage('بارگذاری محصولات ناموفق بود.', true);
+      message('بارگذاری محصولات ناموفق بود.', true);
       return;
     }
 
@@ -176,30 +127,30 @@
       return;
     }
 
-    data.forEach(product => {
+    data.forEach(p => {
       const card = document.createElement('div');
       card.className = 'product';
 
       const title = document.createElement('h3');
-      title.textContent = product.name || 'بدون نام';
+      title.textContent = p.name || 'بدون نام';
 
       const details = document.createElement('p');
       details.textContent =
-        'قیمت: ' + Number(product.price || 0).toLocaleString('fa-IR') +
-        ' تومان | دسته‌بندی: ' + (product.cate || 'ندارد') +
-        ' | موجودی: ' + Number(product.stock || 0).toLocaleString('fa-IR') +
-        ' | وضعیت: ' + (product.is_active ? 'فعال' : 'غیرفعال');
+        'قیمت: ' + Number(p.price || 0).toLocaleString('fa-IR') +
+        ' تومان | دسته‌بندی: ' + (p.category || 'ندارد') +
+        ' | موجودی: ' + Number(p.stock || 0).toLocaleString('fa-IR') +
+        ' | وضعیت: ' + (p.is_active ? 'فعال' : 'غیرفعال');
 
       const edit = document.createElement('button');
-      edit.textContent = 'ویرایش محصول';
-      edit.addEventListener('click', () => editProduct(product));
+      edit.textContent = 'ویرایش';
+      edit.addEventListener('click', () => editProduct(p));
 
-      const remove = document.createElement('button');
-      remove.textContent = 'حذف محصول';
-      remove.className = 'delete';
-      remove.addEventListener('click', () => deleteProduct(product));
+      const del = document.createElement('button');
+      del.textContent = 'حذف محصول';
+      del.className = 'delete';
+      del.addEventListener('click', () => deleteProduct(p));
 
-      card.append(title, details, edit, remove);
+      card.append(title, details, edit, del);
       $('products').appendChild(card);
     });
   }
@@ -208,80 +159,75 @@
     $('productId').value = p.id;
     $('name').value = p.name || '';
     $('price').value = p.price ?? 0;
-    $('cate').value = p.cate || '';
+    $('category').value = p.category || '';
     $('stock').value = p.stock ?? 0;
     $('desc').value = p.desc || '';
     $('imag').value = p.imag || '';
     $('active').value = String(p.is_active !== false);
-
     $('formHeading').textContent = 'ویرایش محصول';
     $('saveButton').textContent = 'ذخیره تغییرات';
     $('cancelButton').classList.remove('hidden');
-    $('productForm').scrollIntoView({ behavior: 'smooth' });
+    $('productForm').scrollIntoView({behavior:'smooth'});
   }
 
   async function deleteProduct(p) {
     if (!confirm('محصول «' + p.name + '» حذف شود؟')) return;
 
-    const { error } = await db.from('products').delete().eq('id', p.id);
-
+    const {error} = await db.from('products').delete().eq('id', p.id);
     if (error) {
-      showMessage('حذف ناموفق بود: ' + error.message, true);
+      message('حذف ناموفق بود: ' + error.message, true);
       return;
     }
 
-    showMessage('محصول حذف شد.');
+    message('محصول حذف شد.');
     await loadProducts();
   }
 
-  $('loginForm').addEventListener('submit', async event => {
-    event.preventDefault();
-
-    const { error } = await db.auth.signInWithPassword({
+  $('loginForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    const {error} = await db.auth.signInWithPassword({
       email: $('email').value.trim(),
       password: $('password').value
     });
-
     $('password').value = '';
 
     if (error) {
-      showMessage('ورود ناموفق بود: ' + error.message, true);
+      message('ورود ناموفق بود: ' + error.message, true);
       return;
     }
 
     showAdmin(true);
-    showMessage('ورود موفق بود.');
+    message('ورود موفق بود.');
     await loadProducts();
   });
 
   $('logoutButton').addEventListener('click', async () => {
-    const { error } = await db.auth.signOut();
-
+    const {error} = await db.auth.signOut();
     if (error) {
-      showMessage('خروج ناموفق بود: ' + error.message, true);
+      message('خروج ناموفق بود: ' + error.message, true);
       return;
     }
-
     showAdmin(false);
     resetForm();
-    showMessage('از حساب خارج شدید.');
+    message('از حساب خارج شدید.');
   });
 
-  $('productForm').addEventListener('submit', async event => {
-    event.preventDefault();
+  $('productForm').addEventListener('submit', async e => {
+    e.preventDefault();
 
-    const stock = Number($('stock').value || 0);
     const price = Number($('price').value);
+    const stock = Number($('stock').value || 0);
 
-    if (!Number.isInteger(stock) || stock < 0 || !Number.isFinite(price) || price < 0) {
-      showMessage('قیمت و موجودی را درست وارد کنید.', true);
+    if (!Number.isFinite(price) || price < 0 ||
+        !Number.isInteger(stock) || stock < 0) {
+      message('قیمت و موجودی را درست وارد کنید.', true);
       return;
     }
 
     const record = {
       name: $('name').value.trim(),
       price,
-      cate: $('cate').value.trim() || null,
+      category: $('category').value.trim() || null,
       stock,
       desc: $('desc').value.trim() || null,
       imag: $('imag').value.trim() || null,
@@ -289,7 +235,7 @@
     };
 
     if (!record.name) {
-      showMessage('نام محصول را وارد کنید.', true);
+      message('نام محصول را وارد کنید.', true);
       return;
     }
 
@@ -299,11 +245,11 @@
       : await db.from('products').insert(record);
 
     if (result.error) {
-      showMessage('ذخیره ناموفق بود: ' + result.error.message, true);
+      message('ذخیره ناموفق بود: ' + result.error.message, true);
       return;
     }
 
-    showMessage(id ? 'تغییرات ذخیره شد.' : 'محصول جدید اضافه شد.');
+    message(id ? 'تغییرات ذخیره شد.' : 'محصول جدید اضافه شد.');
     resetForm();
     await loadProducts();
   });
@@ -311,16 +257,13 @@
   $('refreshButton').addEventListener('click', loadProducts);
   $('cancelButton').addEventListener('click', resetForm);
 
-  db.auth.getSession().then(async ({ data, error }) => {
+  db.auth.getSession().then(async ({data, error}) => {
     if (error) {
-      showMessage('بررسی ورود ناموفق بود: ' + error.message, true);
+      message('بررسی ورود ناموفق بود: ' + error.message, true);
       return;
     }
-
-    const signedIn = !!data.session;
-    showAdmin(signedIn);
-
-    if (signedIn) await loadProducts();
+    showAdmin(!!data.session);
+    if (data.session) await loadProducts();
   });
 
   db.auth.onAuthStateChange((_event, session) => {
@@ -329,4 +272,4 @@
 })();
 </script>
 </body>
-  </html>
+</html>
