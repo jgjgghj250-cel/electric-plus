@@ -498,42 +498,202 @@ let selectedCategory = "همه";
 let cart = {};
 
 function formatPrice(price) {
-  return new Intl.NumberFormat("fa-IR").format(price) + " تومان";
+
+<script>
+const SUPABASE_URL = "https://loqivxvhwbkxorsoryyu.supabase.co";
+const SUPABASE_KEY = "sb_publishable_SAgY0gPoQaZIFdrc39bWgw_YLreqqie";
+
+let db = null;
+let products = [];
+let selectedCategory = "همه";
+let cart = {};
+
+function formatPrice(price) {
+  return new Intl.NumberFormat("fa-IR").format(Number(price) || 0) + " تومان";
+}
+
+function escapeHTML(value) {
+  return String(value ?? "").replace(/[&<>"']/g, char => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  })[char]);
+}
+
+function safeImageURL(value) {
+  const url = String(value || "").trim();
+  if (!url) return "";
+
+  try {
+    const parsed = new URL(url, window.location.href);
+    if (parsed.protocol === "https:" || parsed.protocol === "http:") {
+      return parsed.href;
+    }
+  } catch (_) {}
+
+  return "";
+}
+
+function normalizeProduct(row) {
+  return {
+    id: String(row.id),
+    name: row.name || "محصول بدون نام",
+    category: row.category || "سایر محصولات",
+    description: row.description || row.desc || "",
+    image: safeImageURL(row.image_url || row.imag),
+    price: Number(row.price) || 0,
+    stock: Math.max(0, Number(row.stock) || 0)
+  };
+}
+
+function loadSupabaseLibrary() {
+  return new Promise((resolve, reject) => {
+    if (window.supabase?.createClient) {
+      resolve(window.supabase);
+      return;
+    }
+
+    const script = document.createElement("script");
+    script.src = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
+    script.onload = () => {
+      if (window.supabase?.createClient) {
+        resolve(window.supabase);
+      } else {
+        reject(new Error("کتابخانه Supabase بارگذاری نشد."));
+      }
+    };
+    script.onerror = () => reject(new Error("اتصال به کتابخانه Supabase برقرار نشد."));
+    document.head.appendChild(script);
+  });
+}
+
+async function initStore() {
+  const container = document.getElementById("products");
+  container.innerHTML = '<div class="empty">در حال دریافت محصولات فروشگاه...</div>';
+
+  try {
+    const library = await loadSupabaseLibrary();
+    db = library.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    await fetchProducts();
+  } catch (error) {
+    console.error("Store initialization error:", error);
+    container.innerHTML =
+      '<div class="empty">بارگذاری فروشگاه ناموفق بود. اتصال اینترنت و تنظیمات Supabase را بررسی کنید و صفحه را دوباره بارگذاری کنید.</div>';
+  }
+}
+
+async function fetchProducts() {
+  const container = document.getElementById("products");
+  container.innerHTML = '<div class="empty">در حال دریافت محصولات...</div>';
+
+  try {
+    const { data, error } = await db
+      .from("products")
+      .select("*")
+      .eq("is_active", true)
+      .order("created_at", { ascending: false });
+
+    if (error) throw error;
+
+    products = (data || []).map(normalizeProduct);
+
+    // حذف محصولات غیرفعال و به‌روزرسانی دسته‌بندی‌ها
+    renderCategories();
+    renderProducts();
+    updateCart();
+  } catch (error) {
+    console.error("Supabase products error:", error);
+    products = [];
+    renderCategories();
+    container.innerHTML =
+      '<div class="empty">محصولات دریافت نشدند. دسترسی خواندن جدول products و سیاست‌های RLS در Supabase را بررسی کنید.</div>';
+  }
+}
+
+function renderCategories() {
+  const container = document.querySelector(".categories");
+  const categories = [...new Set(products.map(p => p.category).filter(Boolean))];
+
+  container.innerHTML = "";
+
+  const allButton = document.createElement("button");
+  allButton.className = "category";
+  allButton.textContent = "همه محصولات";
+  allButton.onclick = () => setCategory("همه", allButton);
+  container.appendChild(allButton);
+
+  categories.forEach(category => {
+    const button = document.createElement("button");
+    button.className = "category";
+    button.textContent = category;
+    button.onclick = () => setCategory(category, button);
+    container.appendChild(button);
+  });
+
+  const buttons = [...container.querySelectorAll(".category")];
+  const activeButton = selectedCategory === "همه"
+    ? buttons[0]
+    : buttons.find(button => button.textContent === selectedCategory);
+
+  if (activeButton) {
+    activeButton.classList.add("active");
+  } else {
+    selectedCategory = "همه";
+    buttons[0]?.classList.add("active");
+  }
 }
 
 function renderProducts() {
   const search = document.getElementById("search").value.trim().toLowerCase();
+  const container = document.getElementById("products");
 
   const filtered = products.filter(product => {
     const matchesCategory =
-      selectedCategory === "همه" ||
-      product.category === selectedCategory;
+      selectedCategory === "همه" || product.category === selectedCategory;
 
-    const matchesSearch =
-      product.name.toLowerCase().includes(search) ||
-      product.description.toLowerCase().includes(search);
+    const searchableText =
+      `${product.name} ${product.description} ${product.category}`.toLowerCase();
 
-    return matchesCategory && matchesSearch;
+    return matchesCategory && searchableText.includes(search);
   });
 
-  const container = document.getElementById("products");
-
   if (filtered.length === 0) {
-    container.innerHTML = '<div class="empty">محصولی پیدا نشد.</div>';
+    container.innerHTML =
+      '<div class="empty">محصولی پیدا نشد. اگر محصولی در پنل ثبت کرده‌اید، فعال بودن آن را بررسی کنید.</div>';
     return;
   }
 
-  container.innerHTML = filtered.map(product => `
-    <article class="product">
-      <div class="product-icon">${product.icon}</div>
-      <h3>${product.name}</h3>
-      <div class="product-description">${product.description}</div>
-      <div class="price">${formatPrice(product.price)}</div>
-      <button class="add-button" onclick="addToCart(${product.id})">
-        افزودن به سبد خرید +
-      </button>
-    </article>
-  `).join("");
+  container.innerHTML = filtered.map(product => {
+    const image = product.image
+      ? `<img src="${escapeHTML(product.image)}"
+              alt="${escapeHTML(product.name)}"
+              loading="lazy"
+              style="width:100%;height:100%;max-height:180px;object-fit:contain;border-radius:12px;"
+              onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+         <div style="display:none;width:100%;min-height:110px;align-items:center;justify-content:center;font-size:42px;">📦</div>`
+      : "📦";
+
+    const outOfStock = product.stock <= 0;
+
+    return `
+      <article class="product">
+        <div class="product-icon">${image}</div>
+        <h3>${escapeHTML(product.name)}</h3>
+        <div class="product-description">${escapeHTML(product.description)}</div>
+        <div class="product-description">دسته‌بندی: ${escapeHTML(product.category)}</div>
+        <div class="product-description">موجودی: ${new Intl.NumberFormat("fa-IR").format(product.stock)}</div>
+        <div class="price">${formatPrice(product.price)}</div>
+        <button class="add-button"
+          onclick="addToCart('${escapeHTML(product.id)}')"
+          ${outOfStock ? "disabled style='opacity:.5;cursor:not-allowed;'" : ""}>
+          ${outOfStock ? "ناموجود" : "افزودن به سبد خرید +"}
+        </button>
+      </article>
+    `;
+  }).join("");
 }
 
 function setCategory(category, button) {
@@ -548,11 +708,50 @@ function setCategory(category, button) {
 }
 
 function addToCart(id) {
-  cart[id] = (cart[id] || 0) + 1;
+  const product = products.find(item => item.id === String(id));
+  if (!product) return;
+
+  const quantity = cart[id] || 0;
+
+  if (quantity >= product.stock) {
+    alert("تعداد انتخاب‌شده بیشتر از موجودی محصول است.");
+    return;
+  }
+
+  cart[id] = quantity + 1;
+  updateCart();
+}
+
+function changeQuantity(id, change) {
+  const product = products.find(item => item.id === String(id));
+  if (!product) {
+    delete cart[id];
+    updateCart();
+    return;
+  }
+
+  const nextQuantity = (cart[id] || 0) + change;
+
+  if (nextQuantity <= 0) {
+    delete cart[id];
+  } else if (nextQuantity > product.stock) {
+    alert("موجودی کافی نیست.");
+    return;
+  } else {
+    cart[id] = nextQuantity;
+  }
+
   updateCart();
 }
 
 function updateCart() {
+  // حذف اقلامی که دیگر در فهرست محصولات فعال نیستند
+  Object.keys(cart).forEach(id => {
+    if (!products.some(product => product.id === id)) {
+      delete cart[id];
+    }
+  });
+
   const count = Object.values(cart).reduce((sum, quantity) => sum + quantity, 0);
 
   document.getElementById("cart-count").textContent =
@@ -563,19 +762,21 @@ function updateCart() {
   document.getElementById("cart-items").innerHTML = items.length
     ? items.map(product => `
       <div class="cart-item">
-        <div>${product.icon}</div>
+        <div>${product.image
+          ? `<img src="${escapeHTML(product.image)}" alt="" style="width:42px;height:42px;object-fit:contain;">`
+          : "📦"}</div>
         <div class="cart-item-info">
-          <strong>${product.name}</strong><br>
+          <strong>${escapeHTML(product.name)}</strong><br>
           ${formatPrice(product.price)}
           <div class="quantity">
-            <button onclick="changeQuantity(${product.id}, 1)">+</button>
+            <button onclick="changeQuantity('${escapeHTML(product.id)}', 1)">+</button>
             <span>${new Intl.NumberFormat("fa-IR").format(cart[product.id])}</span>
-            <button onclick="changeQuantity(${product.id}, -1)">−</button>
+            <button onclick="changeQuantity('${escapeHTML(product.id)}', -1)">−</button>
           </div>
         </div>
       </div>
     `).join("")
-    : '<p>سبد خرید شما خالی است.</p>';
+    : "<p>سبد خرید شما خالی است.</p>";
 
   const total = items.reduce(
     (sum, product) => sum + product.price * cart[product.id],
@@ -584,16 +785,6 @@ function updateCart() {
 
   document.getElementById("cart-total").textContent =
     "مجموع: " + formatPrice(total);
-}
-
-function changeQuantity(id, change) {
-  cart[id] = (cart[id] || 0) + change;
-
-  if (cart[id] <= 0) {
-    delete cart[id];
-  }
-
-  updateCart();
 }
 
 function openCart() {
@@ -611,14 +802,13 @@ function outsideCart(event) {
 }
 
 function checkout() {
-  alert(
-    "سبد خرید شما آماده است، اما ثبت سفارش آنلاین هنوز راه‌اندازی نشده است."
-  );
+  alert("سبد خرید آماده است، اما ثبت سفارش و پرداخت آنلاین هنوز راه‌اندازی نشده است.");
 }
 
-renderProducts();
+initStore();
 updateCart();
 </script>
+
 
 </body>
   </html>          
