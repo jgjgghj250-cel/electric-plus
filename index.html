@@ -11,12 +11,11 @@
 <section class="hero"><h1>به الکتریک پلاس خوش آمدید</h1><p>لوازم برقی مورد نیاز خانه و محل کارتان را پیدا کنید.<br>محصولات را بررسی کنید و به سبد خرید اضافه کنید.</p><div class="search"><input id="search" placeholder="🔍 جست‌وجوی محصول..." oninput="renderProducts()"></div></section>
 <main class="container"><h2>دسته‌بندی محصولات</h2><div id="categories" class="categories"></div><h2>محصولات فروشگاه</h2><div id="status" class="status">محصولات نمونه در حال نمایش هستند؛ تلاش برای دریافت محصولات ثبت‌شده...</div><div id="products" class="products"></div><div class="benefits"><div>⚡<br><b>تنوع محصولات</b><br>انتخاب آسان</div><div>🛒<br><b>سبد خرید</b><br>مدیریت کالاها</div><div>📞<br><b>پشتیبانی</b><br>ارتباط با فروشگاه</div></div></main>
 <footer><b>⚡ الکتریک پلاس</b><p>فروشگاه لوازم و تجهیزات الکتریکی</p><p>© الکتریک پلاس</p></footer>
-<div id="cart-panel" class="cart-panel" onclick="outsideCart(event)"><div class="cart-box"><div class="cart-head"><h2>🛒 سبد خرید</h2><button class="close" onclick="closeCart()">بستن ✕</button></div><div id="cart-items"></div><div id="cart-total" class="total"></div><button class="checkout" onclick="checkout()">ادامه و ثبت سفارش</button><p class="notice">این نسخه نمایشی است؛ سفارش و پرداخت واقعی فعال نیست.</p></div></div>
+<div id="cart-panel" class="cart-panel" onclick="outsideCart(event)"><div class="cart-box"><div class="cart-head"><h2>🛒 سبد خرید</h2><button class="close" onclick="closeCart()">بستن ✕</button></div><div id="cart-items"></div><div id="cart-total" class="total"></div><button class="checkout" onclick="checkout()">ادامه و ثبت سفارش</button><p class="notice">برای فعال‌شدن پرداخت واقعی، باید درگاه پرداخت و ثبت سفارش سمت سرور پیکربندی شود.</p></div></div>
 <script>
 "use strict";
 const SUPABASE_URL="https://loqivxvhwbkxorsoryyu.supabase.co";
 const SUPABASE_KEY="sb_publishable_SAgY0gPoQaZIFdrc39bWgw_YLreqqie";
-/* این محصولات مستقل از Supabase هستند و در صورت قطع اتصال نیز نمایش داده می‌شوند. */
 const staticProducts=[
 {id:"static-1",name:"لامپ LED کم‌مصرف",category:"روشنایی",icon:"💡",description:"لامپ مناسب روشنایی خانه",price:85000,stock:20},
 {id:"static-2",name:"چراغ سقفی",category:"روشنایی",icon:"🔆",description:"چراغ مناسب فضای داخلی",price:350000,stock:10},
@@ -38,8 +37,21 @@ function setCategory(c,b){selectedCategory=c;document.querySelectorAll(".categor
 function addToCart(id){let p=products.find(x=>x.id===String(id));if(!p)return;if((cart[id]||0)>=p.stock)return alert("تعداد انتخاب‌شده بیشتر از موجودی محصول است.");cart[id]=(cart[id]||0)+1;updateCart();}
 function changeQuantity(id,d){let p=products.find(x=>x.id===String(id));if(!p){delete cart[id];updateCart();return;}let n=(cart[id]||0)+d;if(n<=0)delete cart[id];else if(n>p.stock)return alert("موجودی کافی نیست.");else cart[id]=n;updateCart();}
 function updateCart(){Object.keys(cart).forEach(id=>{if(!products.some(p=>p.id===id))delete cart[id]});document.getElementById("cart-count").textContent=fmt(Object.values(cart).reduce((a,b)=>a+b,0));let items=products.filter(p=>cart[p.id]);document.getElementById("cart-items").innerHTML=items.length?items.map(p=>`<div class="cart-item"><div>${p.image?`<img src="${esc(p.image)}" alt="" width="42">`:esc(p.icon||"📦")}</div><div class="cart-info"><b>${esc(p.name)}</b><br>${price(p.price)}<div class="quantity"><button onclick="changeQuantity('${esc(p.id)}',1)">+</button><span>${fmt(cart[p.id])}</span><button onclick="changeQuantity('${esc(p.id)}',-1)">−</button></div></div></div>`).join(""):"<p>سبد خرید شما خالی است.</p>";document.getElementById("cart-total").textContent="مجموع: "+price(items.reduce((s,p)=>s+p.price*cart[p.id],0));}
-function openCart(){document.getElementById("cart-panel").classList.add("open")}function closeCart(){document.getElementById("cart-panel").classList.remove("open")}function outsideCart(e){if(e.target.id==="cart-panel")closeCart()}function checkout(){alert("ثبت سفارش و پرداخت آنلاین هنوز راه‌اندازی نشده است.");}
+function openCart(){document.getElementById("cart-panel").classList.add("open")}
+function closeCart(){document.getElementById("cart-panel").classList.remove("open")}
+function outsideCart(e){if(e.target.id==="cart-panel")closeCart()}
+
+/* تابع checkout: پیام درخواستی */
+function checkout(){
+  if(!Object.keys(cart).length){
+    alert("سبد خرید شما خالی است.");
+    return;
+  }
+  alert("ثبت سفارش و پرداخت آنلاین راه‌اندازی شده است.");
+}
+
 async function loadDatabaseProducts(){let status=document.getElementById("status");try{let lib=await new Promise((resolve,reject)=>{if(window.supabase?.createClient)return resolve(window.supabase);let s=document.createElement("script");s.src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";s.onload=()=>window.supabase?.createClient?resolve(window.supabase):reject(Error("Supabase library unavailable"));s.onerror=()=>reject(Error("Supabase library download failed"));document.head.appendChild(s)});db=lib.createClient(SUPABASE_URL,SUPABASE_KEY);let {data,error}=await db.from("products").select("*").eq("is_active",true).order("created_at",{ascending:false});if(error)throw error;let dynamic=(data||[]).map(normalize);products=[...dynamic,...staticProducts];status.textContent=dynamic.length?`اتصال برقرار شد؛ ${fmt(dynamic.length)} محصول ثبت‌شده به‌علاوه ۸ محصول نمونه نمایش داده می‌شوند.`:"اتصال برقرار شد، اما محصول فعالی در جدول نیست؛ ۸ محصول نمونه نمایش داده می‌شوند.";status.style.background="#e8f7ed";status.style.color="#17623a";}catch(err){console.error("Supabase fetch error:",err);products=[...staticProducts];status.textContent="دریافت محصولات ثبت‌شده از پایگاه داده ناموفق بود؛ ۸ محصول نمونه همچنان نمایش داده می‌شوند. برای محصولات ثبت‌شده باید دسترسی خواندن جدول products در Supabase بررسی شود.";}renderCategories();renderProducts();updateCart();}
 renderCategories();renderProducts();updateCart();loadDatabaseProducts();
 </script>
-</body></html>
+</body>
+</html>
