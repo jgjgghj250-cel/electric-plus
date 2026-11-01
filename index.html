@@ -1,9 +1,19 @@
+
 <!doctype html>
 <html lang="fa" dir="rtl">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>الکتریک پلاس | فروشگاه لوازم برقی</title>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+crossorigin="">
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+crossorigin=""></script>
+
 <style>
 *{box-sizing:border-box}
 body{margin:0;font-family:Tahoma,Arial,sans-serif;background:#f4f6fa;color:#172033}
@@ -12,14 +22,14 @@ header .inner{max-width:1100px;margin:auto;display:flex;justify-content:space-be
 .logo{font-size:25px;font-weight:bold}
 .logo span{color:#ffc857}
 .tagline,footer p{color:#cbd5e1;font-size:12px;margin-top:8px}
-.cart-button{background:#ffc857;border:0;border-radius:10px;padding:12px;cursor:pointer}
+.cart-button{background:#ffc857;border:0;border-radius:10px;padding:12px;cursor:pointer;font:inherit}
 .hero{background:linear-gradient(135deg,#172b52,#2456a6);color:white;padding:30px 15px;text-align:center}
 .hero p{line-height:2;color:#e1eaff}
 .search{max-width:600px;margin:18px auto}
 .search input{width:100%;padding:14px;border:0;border-radius:10px;font:inherit}
 .container{max-width:1100px;margin:auto;padding:22px 15px}
 .categories{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px}
-.category{padding:10px 13px;border:1px solid #dce2ed;border-radius:22px;background:white;cursor:pointer}
+.category{padding:10px 13px;border:1px solid #dce2ed;border-radius:22px;background:white;cursor:pointer;font:inherit}
 .category.active{background:#172b52;color:white}
 .status{padding:12px;background:#fff5d6;color:#604800;border-radius:10px;font-size:13px;line-height:1.9;margin-bottom:15px}
 .products{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
@@ -29,27 +39,36 @@ header .inner{max-width:1100px;margin:auto;display:flex;justify-content:space-be
 .product h3{font-size:14px;line-height:1.8}
 .desc{font-size:12px;color:#64748b;line-height:1.9;overflow-wrap:anywhere}
 .price{color:#1559b7;font-weight:bold;margin:10px 0}
-.add{border:0;background:#1757b5;color:white;border-radius:9px;padding:11px;cursor:pointer}
+.add{border:0;background:#1757b5;color:white;border-radius:9px;padding:11px;cursor:pointer;font:inherit}
 .add:disabled{opacity:.5}
 .empty{grid-column:1/-1;background:white;text-align:center;padding:25px;border-radius:12px;line-height:2;color:#64748b}
 .benefits{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:28px 0}
 .benefits div{background:white;border-radius:10px;padding:12px 5px;text-align:center;font-size:12px;line-height:2}
-.cart-panel{display:none;position:fixed;inset:0;background:#0009;z-index:10;justify-content:center;align-items:center;padding:15px}
+.cart-panel{display:none;position:fixed;inset:0;background:#0009;z-index:1000;justify-content:center;align-items:center;padding:15px}
 .cart-panel.open{display:flex}
-.cart-box{background:white;border-radius:16px;padding:18px;width:100%;max-width:450px;max-height:85vh;overflow:auto}
+.cart-box{background:white;border-radius:16px;padding:18px;width:100%;max-width:480px;max-height:92vh;overflow:auto}
 .cart-head{display:flex;justify-content:space-between;align-items:center}
 .cart-item{display:flex;gap:10px;border-bottom:1px solid #ddd;padding:10px 0}
 .cart-info{flex:1;font-size:13px;line-height:2}
 .quantity{display:flex;gap:8px;align-items:center}
-.quantity button,.close{border:0;background:#edf1f7;border-radius:7px;padding:7px 10px}
+.quantity button,.close{border:0;background:#edf1f7;border-radius:7px;padding:7px 10px;cursor:pointer}
 .total{font-weight:bold;margin:18px 0}
-.checkout{width:100%;border:0;border-radius:9px;background:#16804a;color:white;padding:13px;cursor:pointer}
+.checkout{width:100%;border:0;border-radius:9px;background:#16804a;color:white;padding:13px;cursor:pointer;font:inherit}
 .checkout:disabled{opacity:.6;cursor:wait}
 .notice{font-size:12px;color:#64748b;line-height:2}
+.form-title{font-size:16px;margin:22px 0 12px}
+.customer-form label{display:block;font-size:13px;margin:12px 0 6px}
+.customer-form input,.customer-form textarea{width:100%;padding:12px;border:1px solid #d6dce7;border-radius:9px;font:inherit;font-size:14px}
+.customer-form textarea{min-height:85px;resize:vertical}
+#delivery-map{height:260px;width:100%;border-radius:12px;margin-top:10px;border:1px solid #d6dce7;z-index:1}
+.map-button{border:0;border-radius:9px;background:#1757b5;color:white;padding:11px 14px;margin-top:10px;cursor:pointer;font:inherit}
+.map-help{font-size:12px;color:#64748b;line-height:1.9;margin:8px 0}
+.location-status{font-size:12px;color:#17623a;line-height:1.8;margin-top:8px}
 @media(min-width:650px){.products{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(min-width:950px){.products{grid-template-columns:repeat(4,minmax(0,1fr))}}
 </style>
 </head>
+
 <body>
 
 <header>
@@ -93,14 +112,47 @@ header .inner{max-width:1100px;margin:auto;display:flex;justify-content:space-be
 
 <div id="cart-panel" class="cart-panel" onclick="outsideCart(event)">
   <div class="cart-box">
+
     <div class="cart-head">
       <h2>🛒 سبد خرید</h2>
       <button class="close" onclick="closeCart()">بستن ✕</button>
     </div>
+
     <div id="cart-items"></div>
     <div id="cart-total" class="total"></div>
+
+    <hr>
+
+    <h3 class="form-title">اطلاعات تحویل سفارش</h3>
+
+    <div class="customer-form">
+      <label for="customer-name">نام و نام خانوادگی</label>
+      <input id="customer-name" type="text" autocomplete="name" placeholder="نام کامل شما">
+
+      <label for="customer-phone">شماره تماس</label>
+      <input id="customer-phone" type="tel" autocomplete="tel" placeholder="شماره تماس">
+
+      <label for="customer-address">نشانی کامل</label>
+      <textarea id="customer-address" autocomplete="street-address" placeholder="استان، شهر، خیابان، کوچه و پلاک"></textarea>
+    </div>
+
+    <h3 class="form-title">📍 انتخاب محل تحویل روی نقشه</h3>
+    <p class="map-help">
+      روی نقشه محل تحویل را انتخاب کن. می‌توانی نشانگر را هم جابه‌جا کنی.
+      برای استفاده از موقعیت فعلی، دکمه زیر را بزن و اجازه دسترسی مرورگر را تأیید کن.
+    </p>
+
+    <button type="button" class="map-button" onclick="locateMe()">موقعیت فعلی من</button>
+
+    <div id="delivery-map"></div>
+    <div id="location-status" class="location-status">هنوز موقعیتی انتخاب نشده است.</div>
+
     <button id="checkoutBtn" class="checkout" onclick="checkout()">ثبت سفارش</button>
-    <p class="notice">ثبت سفارش از طریق سرور انجام می‌شود. پرداخت آنلاین هنوز به درگاه پرداخت متصل نشده است.</p>
+
+    <p class="notice">
+      ثبت سفارش از طریق سرور انجام می‌شود. پرداخت آنلاین هنوز به درگاه پرداخت متصل نشده است.
+    </p>
+
   </div>
 </div>
 
@@ -126,6 +178,10 @@ let db = null;
 let selectedCategory = "همه";
 let cart = {};
 let checkoutInProgress = false;
+
+let deliveryMap = null;
+let deliveryMarker = null;
+let selectedLocation = null;
 
 const fmt = n => new Intl.NumberFormat("fa-IR").format(Number(n) || 0);
 const price = n => fmt(n) + " تومان";
@@ -233,16 +289,19 @@ function setCategory(c, b) {
 function addToCart(id) {
   const p = products.find(x => x.id === String(id));
   if (!p) return;
+
   if ((cart[id] || 0) >= p.stock) {
     alert("تعداد انتخاب‌شده بیشتر از موجودی محصول است.");
     return;
   }
+
   cart[id] = (cart[id] || 0) + 1;
   updateCart();
 }
 
 function changeQuantity(id, d) {
   const p = products.find(x => x.id === String(id));
+
   if (!p) {
     delete cart[id];
     updateCart();
@@ -250,6 +309,7 @@ function changeQuantity(id, d) {
   }
 
   const n = (cart[id] || 0) + d;
+
   if (n <= 0) delete cart[id];
   else if (n > p.stock) {
     alert("موجودی کافی نیست.");
@@ -257,6 +317,7 @@ function changeQuantity(id, d) {
   } else {
     cart[id] = n;
   }
+
   updateCart();
 }
 
@@ -290,8 +351,14 @@ function updateCart() {
     "مجموع: " + price(items.reduce((s,p) => s + p.price * cart[p.id], 0));
 }
 
+/* باز کردن سبد خرید و آماده‌سازی نقشه */
 function openCart() {
   document.getElementById("cart-panel").classList.add("open");
+
+  setTimeout(() => {
+    initializeMap();
+    if (deliveryMap) deliveryMap.invalidateSize();
+  }, 250);
 }
 
 function closeCart() {
@@ -302,23 +369,132 @@ function outsideCart(e) {
   if (e.target.id === "cart-panel") closeCart();
 }
 
-/* ثبت واقعی سفارش از طریق Supabase Edge Function */
+/* ساخت نقشه */
+function initializeMap() {
+  if (deliveryMap) {
+    deliveryMap.invalidateSize();
+    return;
+  }
+
+  if (!window.L) {
+    document.getElementById("location-status").textContent =
+      "نقشه بارگذاری نشد. اتصال اینترنت را بررسی کن.";
+    return;
+  }
+
+  // نمای اولیه نقشه؛ مشتری باید محل دقیق را خودش انتخاب کند.
+  deliveryMap = L.map("delivery-map").setView([32, 53], 5);
+
+  L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    maxZoom: 19,
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+  }).addTo(deliveryMap);
+
+  deliveryMap.on("click", function(e) {
+    setDeliveryLocation(e.latlng.lat, e.latlng.lng);
+  });
+}
+
+/* ثبت نقطه انتخاب‌شده روی نقشه */
+function setDeliveryLocation(lat, lng) {
+  if (!Number.isFinite(lat) || !Number.isFinite(lng)) return;
+
+  selectedLocation = {
+    latitude: lat,
+    longitude: lng
+  };
+
+  if (!deliveryMap) initializeMap();
+  if (!deliveryMap) return;
+
+  if (!deliveryMarker) {
+    deliveryMarker = L.marker([lat, lng], {
+      draggable: true
+    }).addTo(deliveryMap);
+
+    deliveryMarker.on("dragend", function() {
+      const pos = deliveryMarker.getLatLng();
+      setDeliveryLocation(pos.lat, pos.lng);
+    });
+  } else {
+    deliveryMarker.setLatLng([lat, lng]);
+  }
+
+  document.getElementById("location-status").textContent =
+    "موقعیت انتخاب شد: " +
+    lat.toFixed(6) + " , " + lng.toFixed(6);
+}
+
+/* دریافت موقعیت فعلی با اجازه کاربر */
+function locateMe() {
+  if (!navigator.geolocation) {
+    alert("مرورگر شما امکان تشخیص موقعیت را ندارد.");
+    return;
+  }
+
+  initializeMap();
+
+  if (!deliveryMap) {
+    alert("نقشه هنوز آماده نشده است.");
+    return;
+  }
+
+  document.getElementById("location-status").textContent =
+    "در حال دریافت موقعیت فعلی...";
+
+  navigator.geolocation.getCurrentPosition(
+    function(position) {
+      const lat = position.coords.latitude;
+      const lng = position.coords.longitude;
+
+      setDeliveryLocation(lat, lng);
+      deliveryMap.setView([lat, lng], 16);
+    },
+    function(error) {
+      let message = "دریافت موقعیت ناموفق بود.";
+
+      if (error.code === 1) {
+        message = "اجازه دسترسی به موقعیت داده نشد.";
+      } else if (error.code === 2) {
+        message = "موقعیت فعلی قابل تشخیص نیست.";
+      } else if (error.code === 3) {
+        message = "زمان دریافت موقعیت تمام شد.";
+      }
+
+      document.getElementById("location-status").textContent = message;
+      alert(message);
+    },
+    {
+      enableHighAccuracy: true,
+      timeout: 15000,
+      maximumAge: 0
+    }
+  );
+}
+
+/* ثبت سفارش */
 async function checkout() {
   if (checkoutInProgress) return;
 
   const entries = Object.entries(cart);
+
   if (!entries.length) {
     alert("سبد خرید شما خالی است.");
     return;
   }
 
-  // محصولات نمونه شناسه عددی دیتابیس ندارند.
+  // محصولات نمونه شناسه دیتابیس ندارند.
   const items = [];
+
   for (const [cartId, quantity] of entries) {
     const match = String(cartId).match(/^db-(\d+)$/);
+
     if (!match) {
-      alert("محصول «" + (products.find(p => p.id === cartId)?.name || "") +
-        "» محصول نمونه است و در دیتابیس ثبت نشده؛ برای ثبت سفارش، محصول ثبت‌شده در پنل مدیریت را انتخاب کن.");
+      alert(
+        "محصول «" +
+        (products.find(p => p.id === cartId)?.name || "") +
+        "» محصول نمونه است و در دیتابیس ثبت نشده است. برای سفارش، محصول ثبت‌شده در پنل مدیریت را انتخاب کن."
+      );
       return;
     }
 
@@ -328,16 +504,22 @@ async function checkout() {
     });
   }
 
-  const customer_name = prompt("نام و نام خانوادگی خود را وارد کن:");
-  if (!customer_name || !customer_name.trim()) return;
+  const customer_name = document.getElementById("customer-name").value.trim();
+  const phone = document.getElementById("customer-phone").value.trim();
+  const address = document.getElementById("customer-address").value.trim();
 
-  const phone = prompt("شماره تماس خود را وارد کن:");
-  if (!phone || !phone.trim()) return;
+  if (!customer_name || !phone || !address) {
+    alert("لطفاً نام، شماره تماس و نشانی کامل را وارد کن.");
+    return;
+  }
 
-  const address = prompt("نشانی کامل تحویل سفارش را وارد کن:");
-  if (!address || !address.trim()) return;
+  if (!selectedLocation) {
+    alert("لطفاً محل تحویل را روی نقشه انتخاب کن.");
+    return;
+  }
 
   const button = document.getElementById("checkoutBtn");
+
   checkoutInProgress = true;
   button.disabled = true;
   button.textContent = "در حال ثبت سفارش...";
@@ -352,16 +534,19 @@ async function checkout() {
           "apikey": SUPABASE_KEY
         },
         body: JSON.stringify({
-          customer_name: customer_name.trim(),
-          phone: phone.trim(),
-          address: address.trim(),
-          items: items
+          customer_name,
+          phone,
+          address,
+          latitude: selectedLocation.latitude,
+          longitude: selectedLocation.longitude,
+          items
         })
       }
     );
 
     const responseText = await response.text();
     let result = {};
+
     try {
       result = responseText ? JSON.parse(responseText) : {};
     } catch (_) {
@@ -376,9 +561,29 @@ async function checkout() {
       );
     }
 
+    if (!result.success) {
+      throw new Error(result.error || "پاسخ سرور موفقیت‌آمیز نبود.");
+    }
+
     alert("سفارش شما با موفقیت ثبت شد.");
+
     cart = {};
     updateCart();
+
+    document.getElementById("customer-name").value = "";
+    document.getElementById("customer-phone").value = "";
+    document.getElementById("customer-address").value = "";
+
+    selectedLocation = null;
+
+    if (deliveryMarker && deliveryMap) {
+      deliveryMap.removeLayer(deliveryMarker);
+      deliveryMarker = null;
+    }
+
+    document.getElementById("location-status").textContent =
+      "هنوز موقعیتی انتخاب نشده است.";
+
     closeCart();
 
   } catch (error) {
@@ -391,6 +596,7 @@ async function checkout() {
   }
 }
 
+/* دریافت محصولات از Supabase */
 async function loadDatabaseProducts() {
   const status = document.getElementById("status");
 
@@ -400,10 +606,13 @@ async function loadDatabaseProducts() {
 
       const s = document.createElement("script");
       s.src = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
+
       s.onload = () => window.supabase?.createClient
         ? resolve(window.supabase)
         : reject(Error("کتابخانه Supabase بارگذاری نشد."));
+
       s.onerror = () => reject(Error("دریافت کتابخانه Supabase ناموفق بود."));
+
       document.head.appendChild(s);
     });
 
@@ -429,7 +638,9 @@ async function loadDatabaseProducts() {
 
   } catch (err) {
     console.error("Supabase fetch error:", err);
+
     products = [...staticProducts];
+
     status.textContent =
       "دریافت محصولات ثبت‌شده ناموفق بود؛ محصولات نمونه نمایش داده می‌شوند. دسترسی خواندن جدول products را بررسی کن.";
   }
@@ -444,5 +655,6 @@ renderProducts();
 updateCart();
 loadDatabaseProducts();
 </script>
+
 </body>
 </html>
