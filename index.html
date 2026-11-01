@@ -1,57 +1,448 @@
 <!doctype html>
 <html lang="fa" dir="rtl">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>الکتریک پلاس | فروشگاه لوازم برقی</title>
 <style>
-*{box-sizing:border-box}body{margin:0;font-family:Tahoma,Arial,sans-serif;background:#f4f6fa;color:#172033}header,footer{background:#101b35;color:#fff;padding:20px 15px}header .inner{max-width:1100px;margin:auto;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.logo{font-size:25px;font-weight:bold}.logo span{color:#ffc857}.tagline,footer p{color:#cbd5e1;font-size:12px;margin-top:8px}.cart-button{background:#ffc857;border:0;border-radius:10px;padding:12px;cursor:pointer}.hero{background:linear-gradient(135deg,#172b52,#2456a6);color:white;padding:30px 15px;text-align:center}.hero p{line-height:2;color:#e1eaff}.search{max-width:600px;margin:18px auto}.search input{width:100%;padding:14px;border:0;border-radius:10px;font:inherit}.container{max-width:1100px;margin:auto;padding:22px 15px}.categories{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px}.category{padding:10px 13px;border:1px solid #dce2ed;border-radius:22px;background:white;cursor:pointer}.category.active{background:#172b52;color:white}.status{padding:12px;background:#fff5d6;color:#604800;border-radius:10px;font-size:13px;line-height:1.9;margin-bottom:15px}.products{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.product{background:white;border:1px solid #e6eaf1;border-radius:14px;padding:12px;min-width:0;display:flex;flex-direction:column}.visual{height:125px;background:#f0f4fb;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:44px;overflow:hidden}.visual img{width:100%;height:100%;object-fit:contain}.product h3{font-size:14px;line-height:1.8}.desc{font-size:12px;color:#64748b;line-height:1.9;overflow-wrap:anywhere}.price{color:#1559b7;font-weight:bold;margin:10px 0}.add{border:0;background:#1757b5;color:white;border-radius:9px;padding:11px;cursor:pointer}.add:disabled{opacity:.5}.empty{grid-column:1/-1;background:white;text-align:center;padding:25px;border-radius:12px;line-height:2;color:#64748b}.benefits{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:28px 0}.benefits div{background:white;border-radius:10px;padding:12px 5px;text-align:center;font-size:12px;line-height:2}.cart-panel{display:none;position:fixed;inset:0;background:#0009;z-index:10;justify-content:center;align-items:center;padding:15px}.cart-panel.open{display:flex}.cart-box{background:white;border-radius:16px;padding:18px;width:100%;max-width:450px;max-height:85vh;overflow:auto}.cart-head{display:flex;justify-content:space-between;align-items:center}.cart-item{display:flex;gap:10px;border-bottom:1px solid #ddd;padding:10px 0}.cart-info{flex:1;font-size:13px;line-height:2}.quantity{display:flex;gap:8px;align-items:center}.quantity button,.close{border:0;background:#edf1f7;border-radius:7px;padding:7px 10px}.total{font-weight:bold;margin:18px 0}.checkout{width:100%;border:0;border-radius:9px;background:#16804a;color:white;padding:13px}.notice{font-size:12px;color:#64748b;line-height:2}@media(min-width:650px){.products{grid-template-columns:repeat(3,minmax(0,1fr))}}@media(min-width:950px){.products{grid-template-columns:repeat(4,minmax(0,1fr))}}
-</style></head>
+*{box-sizing:border-box}
+body{margin:0;font-family:Tahoma,Arial,sans-serif;background:#f4f6fa;color:#172033}
+header,footer{background:#101b35;color:#fff;padding:20px 15px}
+header .inner{max-width:1100px;margin:auto;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.logo{font-size:25px;font-weight:bold}
+.logo span{color:#ffc857}
+.tagline,footer p{color:#cbd5e1;font-size:12px;margin-top:8px}
+.cart-button{background:#ffc857;border:0;border-radius:10px;padding:12px;cursor:pointer}
+.hero{background:linear-gradient(135deg,#172b52,#2456a6);color:white;padding:30px 15px;text-align:center}
+.hero p{line-height:2;color:#e1eaff}
+.search{max-width:600px;margin:18px auto}
+.search input{width:100%;padding:14px;border:0;border-radius:10px;font:inherit}
+.container{max-width:1100px;margin:auto;padding:22px 15px}
+.categories{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px}
+.category{padding:10px 13px;border:1px solid #dce2ed;border-radius:22px;background:white;cursor:pointer}
+.category.active{background:#172b52;color:white}
+.status{padding:12px;background:#fff5d6;color:#604800;border-radius:10px;font-size:13px;line-height:1.9;margin-bottom:15px}
+.products{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.product{background:white;border:1px solid #e6eaf1;border-radius:14px;padding:12px;min-width:0;display:flex;flex-direction:column}
+.visual{height:125px;background:#f0f4fb;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:44px;overflow:hidden}
+.visual img{width:100%;height:100%;object-fit:contain}
+.product h3{font-size:14px;line-height:1.8}
+.desc{font-size:12px;color:#64748b;line-height:1.9;overflow-wrap:anywhere}
+.price{color:#1559b7;font-weight:bold;margin:10px 0}
+.add{border:0;background:#1757b5;color:white;border-radius:9px;padding:11px;cursor:pointer}
+.add:disabled{opacity:.5}
+.empty{grid-column:1/-1;background:white;text-align:center;padding:25px;border-radius:12px;line-height:2;color:#64748b}
+.benefits{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:28px 0}
+.benefits div{background:white;border-radius:10px;padding:12px 5px;text-align:center;font-size:12px;line-height:2}
+.cart-panel{display:none;position:fixed;inset:0;background:#0009;z-index:10;justify-content:center;align-items:center;padding:15px}
+.cart-panel.open{display:flex}
+.cart-box{background:white;border-radius:16px;padding:18px;width:100%;max-width:450px;max-height:85vh;overflow:auto}
+.cart-head{display:flex;justify-content:space-between;align-items:center}
+.cart-item{display:flex;gap:10px;border-bottom:1px solid #ddd;padding:10px 0}
+.cart-info{flex:1;font-size:13px;line-height:2}
+.quantity{display:flex;gap:8px;align-items:center}
+.quantity button,.close{border:0;background:#edf1f7;border-radius:7px;padding:7px 10px}
+.total{font-weight:bold;margin:18px 0}
+.checkout{width:100%;border:0;border-radius:9px;background:#16804a;color:white;padding:13px;cursor:pointer}
+.checkout:disabled{opacity:.6;cursor:wait}
+.notice{font-size:12px;color:#64748b;line-height:2}
+@media(min-width:650px){.products{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(min-width:950px){.products{grid-template-columns:repeat(4,minmax(0,1fr))}}
+</style>
+</head>
 <body>
-<header><div class="inner"><div><div class="logo">⚡ الکتریک <span>پلاس</span></div><div class="tagline">دنیای لوازم برقی، در دسترس شما</div></div><button class="cart-button" onclick="openCart()">🛒 سبد خرید <span id="cart-count">۰</span></button></div></header>
-<section class="hero"><h1>به الکتریک پلاس خوش آمدید</h1><p>لوازم برقی مورد نیاز خانه و محل کارتان را پیدا کنید.<br>محصولات را بررسی کنید و به سبد خرید اضافه کنید.</p><div class="search"><input id="search" placeholder="🔍 جست‌وجوی محصول..." oninput="renderProducts()"></div></section>
-<main class="container"><h2>دسته‌بندی محصولات</h2><div id="categories" class="categories"></div><h2>محصولات فروشگاه</h2><div id="status" class="status">محصولات نمونه در حال نمایش هستند؛ تلاش برای دریافت محصولات ثبت‌شده...</div><div id="products" class="products"></div><div class="benefits"><div>⚡<br><b>تنوع محصولات</b><br>انتخاب آسان</div><div>🛒<br><b>سبد خرید</b><br>مدیریت کالاها</div><div>📞<br><b>پشتیبانی</b><br>ارتباط با فروشگاه</div></div></main>
-<footer><b>⚡ الکتریک پلاس</b><p>فروشگاه لوازم و تجهیزات الکتریکی</p><p>© الکتریک پلاس</p></footer>
-<div id="cart-panel" class="cart-panel" onclick="outsideCart(event)"><div class="cart-box"><div class="cart-head"><h2>🛒 سبد خرید</h2><button class="close" onclick="closeCart()">بستن ✕</button></div><div id="cart-items"></div><div id="cart-total" class="total"></div><button class="checkout" onclick="checkout()">ادامه و ثبت سفارش</button><p class="notice">برای فعال‌شدن پرداخت واقعی، باید درگاه پرداخت و ثبت سفارش سمت سرور پیکربندی شود.</p></div></div>
+
+<header>
+  <div class="inner">
+    <div>
+      <div class="logo">⚡ الکتریک <span>پلاس</span></div>
+      <div class="tagline">دنیای لوازم برقی، در دسترس شما</div>
+    </div>
+    <button class="cart-button" onclick="openCart()">🛒 سبد خرید <span id="cart-count">۰</span></button>
+  </div>
+</header>
+
+<section class="hero">
+  <h1>به الکتریک پلاس خوش آمدید</h1>
+  <p>لوازم برقی مورد نیاز خانه و محل کارتان را پیدا کنید.<br>محصولات را بررسی کنید و به سبد خرید اضافه کنید.</p>
+  <div class="search">
+    <input id="search" placeholder="🔍 جست‌وجوی محصول..." oninput="renderProducts()">
+  </div>
+</section>
+
+<main class="container">
+  <h2>دسته‌بندی محصولات</h2>
+  <div id="categories" class="categories"></div>
+
+  <h2>محصولات فروشگاه</h2>
+  <div id="status" class="status">محصولات در حال بارگذاری هستند...</div>
+  <div id="products" class="products"></div>
+
+  <div class="benefits">
+    <div>⚡<br><b>تنوع محصولات</b><br>انتخاب آسان</div>
+    <div>🛒<br><b>سبد خرید</b><br>مدیریت کالاها</div>
+    <div>📞<br><b>پشتیبانی</b><br>ارتباط با فروشگاه</div>
+  </div>
+</main>
+
+<footer>
+  <b>⚡ الکتریک پلاس</b>
+  <p>فروشگاه لوازم و تجهیزات الکتریکی</p>
+  <p>© الکتریک پلاس</p>
+</footer>
+
+<div id="cart-panel" class="cart-panel" onclick="outsideCart(event)">
+  <div class="cart-box">
+    <div class="cart-head">
+      <h2>🛒 سبد خرید</h2>
+      <button class="close" onclick="closeCart()">بستن ✕</button>
+    </div>
+    <div id="cart-items"></div>
+    <div id="cart-total" class="total"></div>
+    <button id="checkoutBtn" class="checkout" onclick="checkout()">ثبت سفارش</button>
+    <p class="notice">ثبت سفارش از طریق سرور انجام می‌شود. پرداخت آنلاین هنوز به درگاه پرداخت متصل نشده است.</p>
+  </div>
+</div>
+
 <script>
 "use strict";
-const SUPABASE_URL="https://loqivxvhwbkxorsoryyu.supabase.co";
-const SUPABASE_KEY="sb_publishable_SAgY0gPoQaZIFdrc39bWgw_YLreqqie";
-const staticProducts=[
-{id:"static-1",name:"لامپ LED کم‌مصرف",category:"روشنایی",icon:"💡",description:"لامپ مناسب روشنایی خانه",price:85000,stock:20},
-{id:"static-2",name:"چراغ سقفی",category:"روشنایی",icon:"🔆",description:"چراغ مناسب فضای داخلی",price:350000,stock:10},
-{id:"static-3",name:"سیم برق",category:"سیم و کابل",icon:"〰️",description:"سیم برق برای مصارف عمومی",price:45000,stock:30},
-{id:"static-4",name:"کابل برق",category:"سیم و کابل",icon:"🔌",description:"کابل برق برای کاربردهای مناسب",price:120000,stock:15},
-{id:"static-5",name:"فازمتر",category:"ابزار",icon:"🪛",description:"ابزار بررسی وجود ولتاژ",price:65000,stock:12},
-{id:"static-6",name:"انبردست",category:"ابزار",icon:"🧰",description:"ابزار دستی عمومی",price:180000,stock:8},
-{id:"static-7",name:"کلید برق",category:"برقی",icon:"🔘",description:"کلید روشنایی ساختمان",price:55000,stock:25},
-{id:"static-8",name:"پریز برق",category:"برقی",icon:"🔌",description:"پریز برق خانگی",price:75000,stock:25}];
-let products=[...staticProducts],db=null,selectedCategory="همه",cart={};
-const fmt=n=>new Intl.NumberFormat("fa-IR").format(Number(n)||0);
-const price=n=>fmt(n)+" تومان";
-function esc(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
-function imageURL(v){try{let u=new URL(String(v||""),location.href);return /^https?:$/.test(u.protocol)?u.href:"";}catch(e){return "";}}
-function normalize(r){return{id:"db-"+String(r.id),name:r.name||"محصول بدون نام",category:r.category||"سایر محصولات",description:r.description||r.desc||"",image:imageURL(r.image_url||r.imag),icon:"📦",price:Number(r.price)||0,stock:Math.max(0,Number(r.stock)||0)};}
-function renderCategories(){let el=document.getElementById("categories"),cats=[...new Set(products.map(p=>p.category).filter(Boolean))];el.innerHTML="";let b=document.createElement("button");b.className="category";b.textContent="همه محصولات";b.onclick=()=>setCategory("همه",b);el.appendChild(b);cats.forEach(c=>{let x=document.createElement("button");x.className="category";x.textContent=c;x.onclick=()=>setCategory(c,x);el.appendChild(x)});let bs=[...el.querySelectorAll("button")],active=selectedCategory==="همه"?bs[0]:bs.find(x=>x.textContent===selectedCategory);if(!active){selectedCategory="همه";active=bs[0]}if(active)active.classList.add("active");}
-function renderProducts(){let q=document.getElementById("search").value.trim().toLocaleLowerCase("fa"),el=document.getElementById("products");let list=products.filter(p=>(selectedCategory==="همه"||p.category===selectedCategory)&&(`${p.name} ${p.description} ${p.category}`.toLocaleLowerCase("fa").includes(q)));if(!list.length){el.innerHTML='<div class="empty">محصولی پیدا نشد. عبارت جست‌وجو را پاک کنید یا دسته دیگری را انتخاب کنید.</div>';return;}el.innerHTML=list.map(p=>{let visual=p.image?`<img src="${esc(p.image)}" alt="${esc(p.name)}" loading="lazy" onerror="this.style.display='none';this.parentElement.textContent='📦'">`:esc(p.icon||"📦");return `<article class="product"><div class="visual">${visual}</div><h3>${esc(p.name)}</h3><div class="desc">${esc(p.description)}</div><div class="desc">دسته‌بندی: ${esc(p.category)}</div><div class="desc">موجودی: ${fmt(p.stock)}</div><div class="price">${price(p.price)}</div><button class="add" onclick="addToCart('${esc(p.id)}')" ${p.stock<=0?"disabled":""}>${p.stock<=0?"ناموجود":"افزودن به سبد خرید +"}</button></article>`}).join("");}
-function setCategory(c,b){selectedCategory=c;document.querySelectorAll(".category").forEach(x=>x.classList.remove("active"));b.classList.add("active");renderProducts();}
-function addToCart(id){let p=products.find(x=>x.id===String(id));if(!p)return;if((cart[id]||0)>=p.stock)return alert("تعداد انتخاب‌شده بیشتر از موجودی محصول است.");cart[id]=(cart[id]||0)+1;updateCart();}
-function changeQuantity(id,d){let p=products.find(x=>x.id===String(id));if(!p){delete cart[id];updateCart();return;}let n=(cart[id]||0)+d;if(n<=0)delete cart[id];else if(n>p.stock)return alert("موجودی کافی نیست.");else cart[id]=n;updateCart();}
-function updateCart(){Object.keys(cart).forEach(id=>{if(!products.some(p=>p.id===id))delete cart[id]});document.getElementById("cart-count").textContent=fmt(Object.values(cart).reduce((a,b)=>a+b,0));let items=products.filter(p=>cart[p.id]);document.getElementById("cart-items").innerHTML=items.length?items.map(p=>`<div class="cart-item"><div>${p.image?`<img src="${esc(p.image)}" alt="" width="42">`:esc(p.icon||"📦")}</div><div class="cart-info"><b>${esc(p.name)}</b><br>${price(p.price)}<div class="quantity"><button onclick="changeQuantity('${esc(p.id)}',1)">+</button><span>${fmt(cart[p.id])}</span><button onclick="changeQuantity('${esc(p.id)}',-1)">−</button></div></div></div>`).join(""):"<p>سبد خرید شما خالی است.</p>";document.getElementById("cart-total").textContent="مجموع: "+price(items.reduce((s,p)=>s+p.price*cart[p.id],0));}
-function openCart(){document.getElementById("cart-panel").classList.add("open")}
-function closeCart(){document.getElementById("cart-panel").classList.remove("open")}
-function outsideCart(e){if(e.target.id==="cart-panel")closeCart()}
 
-/* تابع checkout: پیام درخواستی */
-function checkout(){
-  if(!Object.keys(cart).length){
+const SUPABASE_URL = "https://loqivxvhwbkxorsoryyu.supabase.co";
+const SUPABASE_KEY = "sb_publishable_SAgY0gPoQaZIFdrc39bWgw_YLreqqie";
+
+const staticProducts = [
+  {id:"static-1",name:"لامپ LED کم‌مصرف",category:"روشنایی",icon:"💡",description:"لامپ مناسب روشنایی خانه",price:85000,stock:20},
+  {id:"static-2",name:"چراغ سقفی",category:"روشنایی",icon:"🔆",description:"چراغ مناسب فضای داخلی",price:350000,stock:10},
+  {id:"static-3",name:"سیم برق",category:"سیم و کابل",icon:"〰️",description:"سیم برق برای مصارف عمومی",price:45000,stock:30},
+  {id:"static-4",name:"کابل برق",category:"سیم و کابل",icon:"🔌",description:"کابل برق برای کاربردهای مناسب",price:120000,stock:15},
+  {id:"static-5",name:"فازمتر",category:"ابزار",icon:"🪛",description:"ابزار بررسی وجود ولتاژ",price:65000,stock:12},
+  {id:"static-6",name:"انبردست",category:"ابزار",icon:"🧰",description:"ابزار دستی عمومی",price:180000,stock:8},
+  {id:"static-7",name:"کلید برق",category:"برقی",icon:"🔘",description:"کلید روشنایی ساختمان",price:55000,stock:25},
+  {id:"static-8",name:"پریز برق",category:"برقی",icon:"🔌",description:"پریز برق خانگی",price:75000,stock:25}
+];
+
+let products = [...staticProducts];
+let db = null;
+let selectedCategory = "همه";
+let cart = {};
+let checkoutInProgress = false;
+
+const fmt = n => new Intl.NumberFormat("fa-IR").format(Number(n) || 0);
+const price = n => fmt(n) + " تومان";
+
+function esc(v) {
+  return String(v ?? "").replace(/[&<>"']/g, c => ({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[c]));
+}
+
+function imageURL(v) {
+  try {
+    const u = new URL(String(v || ""), location.href);
+    return /^https?:$/.test(u.protocol) ? u.href : "";
+  } catch(e) {
+    return "";
+  }
+}
+
+function normalize(r) {
+  return {
+    id:"db-" + String(r.id),
+    name:r.name || "محصول بدون نام",
+    category:r.category || "سایر محصولات",
+    description:r.description || r.desc || "",
+    image:imageURL(r.image_url || r.imag),
+    icon:"📦",
+    price:Number(r.price) || 0,
+    stock:Math.max(0, Number(r.stock) || 0)
+  };
+}
+
+function renderCategories() {
+  const el = document.getElementById("categories");
+  const cats = [...new Set(products.map(p => p.category).filter(Boolean))];
+  el.innerHTML = "";
+
+  const all = document.createElement("button");
+  all.className = "category";
+  all.textContent = "همه محصولات";
+  all.onclick = () => setCategory("همه", all);
+  el.appendChild(all);
+
+  cats.forEach(c => {
+    const x = document.createElement("button");
+    x.className = "category";
+    x.textContent = c;
+    x.onclick = () => setCategory(c, x);
+    el.appendChild(x);
+  });
+
+  const buttons = [...el.querySelectorAll("button")];
+  let active = selectedCategory === "همه"
+    ? buttons[0]
+    : buttons.find(x => x.textContent === selectedCategory);
+
+  if (!active) {
+    selectedCategory = "همه";
+    active = buttons[0];
+  }
+  if (active) active.classList.add("active");
+}
+
+function renderProducts() {
+  const q = document.getElementById("search").value.trim().toLocaleLowerCase("fa");
+  const el = document.getElementById("products");
+
+  const list = products.filter(p =>
+    (selectedCategory === "همه" || p.category === selectedCategory) &&
+    (`${p.name} ${p.description} ${p.category}`.toLocaleLowerCase("fa").includes(q))
+  );
+
+  if (!list.length) {
+    el.innerHTML = '<div class="empty">محصولی پیدا نشد.</div>';
+    return;
+  }
+
+  el.innerHTML = list.map(p => {
+    const visual = p.image
+      ? `<img src="${esc(p.image)}" alt="${esc(p.name)}" loading="lazy" onerror="this.style.display='none';this.parentElement.textContent='📦'">`
+      : esc(p.icon || "📦");
+
+    return `
+      <article class="product">
+        <div class="visual">${visual}</div>
+        <h3>${esc(p.name)}</h3>
+        <div class="desc">${esc(p.description)}</div>
+        <div class="desc">دسته‌بندی: ${esc(p.category)}</div>
+        <div class="desc">موجودی: ${fmt(p.stock)}</div>
+        <div class="price">${price(p.price)}</div>
+        <button class="add" onclick="addToCart('${esc(p.id)}')" ${p.stock <= 0 ? "disabled" : ""}>
+          ${p.stock <= 0 ? "ناموجود" : "افزودن به سبد خرید +"}
+        </button>
+      </article>`;
+  }).join("");
+}
+
+function setCategory(c, b) {
+  selectedCategory = c;
+  document.querySelectorAll(".category").forEach(x => x.classList.remove("active"));
+  b.classList.add("active");
+  renderProducts();
+}
+
+function addToCart(id) {
+  const p = products.find(x => x.id === String(id));
+  if (!p) return;
+  if ((cart[id] || 0) >= p.stock) {
+    alert("تعداد انتخاب‌شده بیشتر از موجودی محصول است.");
+    return;
+  }
+  cart[id] = (cart[id] || 0) + 1;
+  updateCart();
+}
+
+function changeQuantity(id, d) {
+  const p = products.find(x => x.id === String(id));
+  if (!p) {
+    delete cart[id];
+    updateCart();
+    return;
+  }
+
+  const n = (cart[id] || 0) + d;
+  if (n <= 0) delete cart[id];
+  else if (n > p.stock) {
+    alert("موجودی کافی نیست.");
+    return;
+  } else {
+    cart[id] = n;
+  }
+  updateCart();
+}
+
+function updateCart() {
+  Object.keys(cart).forEach(id => {
+    if (!products.some(p => p.id === id)) delete cart[id];
+  });
+
+  document.getElementById("cart-count").textContent =
+    fmt(Object.values(cart).reduce((a,b) => a+b, 0));
+
+  const items = products.filter(p => cart[p.id]);
+
+  document.getElementById("cart-items").innerHTML = items.length
+    ? items.map(p => `
+      <div class="cart-item">
+        <div>${p.image ? `<img src="${esc(p.image)}" alt="" width="42">` : esc(p.icon || "📦")}</div>
+        <div class="cart-info">
+          <b>${esc(p.name)}</b><br>
+          ${price(p.price)}
+          <div class="quantity">
+            <button onclick="changeQuantity('${esc(p.id)}',1)">+</button>
+            <span>${fmt(cart[p.id])}</span>
+            <button onclick="changeQuantity('${esc(p.id)}',-1)">−</button>
+          </div>
+        </div>
+      </div>`).join("")
+    : "<p>سبد خرید شما خالی است.</p>";
+
+  document.getElementById("cart-total").textContent =
+    "مجموع: " + price(items.reduce((s,p) => s + p.price * cart[p.id], 0));
+}
+
+function openCart() {
+  document.getElementById("cart-panel").classList.add("open");
+}
+
+function closeCart() {
+  document.getElementById("cart-panel").classList.remove("open");
+}
+
+function outsideCart(e) {
+  if (e.target.id === "cart-panel") closeCart();
+}
+
+/* ثبت واقعی سفارش از طریق Supabase Edge Function */
+async function checkout() {
+  if (checkoutInProgress) return;
+
+  const entries = Object.entries(cart);
+  if (!entries.length) {
     alert("سبد خرید شما خالی است.");
     return;
   }
-  alert("ثبت سفارش و پرداخت آنلاین راه‌اندازی شده است.");
+
+  // محصولات نمونه شناسه عددی دیتابیس ندارند.
+  const items = [];
+  for (const [cartId, quantity] of entries) {
+    const match = String(cartId).match(/^db-(\d+)$/);
+    if (!match) {
+      alert("محصول «" + (products.find(p => p.id === cartId)?.name || "") +
+        "» محصول نمونه است و در دیتابیس ثبت نشده؛ برای ثبت سفارش، محصول ثبت‌شده در پنل مدیریت را انتخاب کن.");
+      return;
+    }
+
+    items.push({
+      id: Number(match[1]),
+      quantity: Number(quantity)
+    });
+  }
+
+  const customer_name = prompt("نام و نام خانوادگی خود را وارد کن:");
+  if (!customer_name || !customer_name.trim()) return;
+
+  const phone = prompt("شماره تماس خود را وارد کن:");
+  if (!phone || !phone.trim()) return;
+
+  const address = prompt("نشانی کامل تحویل سفارش را وارد کن:");
+  if (!address || !address.trim()) return;
+
+  const button = document.getElementById("checkoutBtn");
+  checkoutInProgress = true;
+  button.disabled = true;
+  button.textContent = "در حال ثبت سفارش...";
+
+  try {
+    const response = await fetch(
+      `${SUPABASE_URL}/functions/v1/submit-order`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "apikey": SUPABASE_KEY
+        },
+        body: JSON.stringify({
+          customer_name: customer_name.trim(),
+          phone: phone.trim(),
+          address: address.trim(),
+          items: items
+        })
+      }
+    );
+
+    const responseText = await response.text();
+    let result = {};
+    try {
+      result = responseText ? JSON.parse(responseText) : {};
+    } catch (_) {
+      result = { message: responseText };
+    }
+
+    if (!response.ok) {
+      throw new Error(
+        result.error ||
+        result.message ||
+        "خطا در ثبت سفارش. کد خطا: " + response.status
+      );
+    }
+
+    alert("سفارش شما با موفقیت ثبت شد.");
+    cart = {};
+    updateCart();
+    closeCart();
+
+  } catch (error) {
+    console.error("Checkout error:", error);
+    alert("ثبت سفارش انجام نشد:\n" + (error.message || "خطای نامشخص"));
+  } finally {
+    checkoutInProgress = false;
+    button.disabled = false;
+    button.textContent = "ثبت سفارش";
+  }
 }
 
-async function loadDatabaseProducts(){let status=document.getElementById("status");try{let lib=await new Promise((resolve,reject)=>{if(window.supabase?.createClient)return resolve(window.supabase);let s=document.createElement("script");s.src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";s.onload=()=>window.supabase?.createClient?resolve(window.supabase):reject(Error("Supabase library unavailable"));s.onerror=()=>reject(Error("Supabase library download failed"));document.head.appendChild(s)});db=lib.createClient(SUPABASE_URL,SUPABASE_KEY);let {data,error}=await db.from("products").select("*").eq("is_active",true).order("created_at",{ascending:false});if(error)throw error;let dynamic=(data||[]).map(normalize);products=[...dynamic,...staticProducts];status.textContent=dynamic.length?`اتصال برقرار شد؛ ${fmt(dynamic.length)} محصول ثبت‌شده به‌علاوه ۸ محصول نمونه نمایش داده می‌شوند.`:"اتصال برقرار شد، اما محصول فعالی در جدول نیست؛ ۸ محصول نمونه نمایش داده می‌شوند.";status.style.background="#e8f7ed";status.style.color="#17623a";}catch(err){console.error("Supabase fetch error:",err);products=[...staticProducts];status.textContent="دریافت محصولات ثبت‌شده از پایگاه داده ناموفق بود؛ ۸ محصول نمونه همچنان نمایش داده می‌شوند. برای محصولات ثبت‌شده باید دسترسی خواندن جدول products در Supabase بررسی شود.";}renderCategories();renderProducts();updateCart();}
-renderCategories();renderProducts();updateCart();loadDatabaseProducts();
+async function loadDatabaseProducts() {
+  const status = document.getElementById("status");
+
+  try {
+    const lib = await new Promise((resolve, reject) => {
+      if (window.supabase?.createClient) return resolve(window.supabase);
+
+      const s = document.createElement("script");
+      s.src = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
+      s.onload = () => window.supabase?.createClient
+        ? resolve(window.supabase)
+        : reject(Error("کتابخانه Supabase بارگذاری نشد."));
+      s.onerror = () => reject(Error("دریافت کتابخانه Supabase ناموفق بود."));
+      document.head.appendChild(s);
+    });
+
+    db = lib.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    const { data, error } = await db
+      .from("products")
+      .select("*")
+      .eq("is_active", true)
+      .order("created_at", { ascending: false });
+
+    if (error) throw error;
+
+    const dynamic = (data || []).map(normalize);
+    products = [...dynamic, ...staticProducts];
+
+    status.textContent = dynamic.length
+      ? `اتصال برقرار شد؛ ${fmt(dynamic.length)} محصول ثبت‌شده به‌علاوه ۸ محصول نمونه نمایش داده می‌شوند.`
+      : "اتصال برقرار شد، اما محصول فعالی در جدول نیست؛ ۸ محصول نمونه نمایش داده می‌شوند.";
+
+    status.style.background = "#e8f7ed";
+    status.style.color = "#17623a";
+
+  } catch (err) {
+    console.error("Supabase fetch error:", err);
+    products = [...staticProducts];
+    status.textContent =
+      "دریافت محصولات ثبت‌شده ناموفق بود؛ محصولات نمونه نمایش داده می‌شوند. دسترسی خواندن جدول products را بررسی کن.";
+  }
+
+  renderCategories();
+  renderProducts();
+  updateCart();
+}
+
+renderCategories();
+renderProducts();
+updateCart();
+loadDatabaseProducts();
 </script>
 </body>
 </html>
