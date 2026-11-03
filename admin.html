@@ -1,43 +1,147 @@
+
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>پنل مدیریت الکتریک پلاس</title>
+
+<link rel="stylesheet"
+href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
 <style>
-body{font-family:Tahoma,Arial,sans-serif;background:#f1f5f9;color:#172033;margin:0;padding:15px}
-main{max-width:850px;margin:auto}
-.box{background:white;padding:18px;margin-bottom:16px;border-radius:12px;box-shadow:0 3px 12px #0001}
-input,textarea,select,button{font:inherit;box-sizing:border-box;width:100%;padding:11px;margin:6px 0 12px;border:1px solid #cbd5e1;border-radius:8px}
-button{background:#2563eb;color:white;border:0;cursor:pointer}
-.delete{background:#dc2626}.gray{background:#64748b}
-.message{padding:12px;border-radius:8px;background:#e0f2fe;margin:12px 0;overflow-wrap:anywhere;white-space:pre-wrap}
-.hidden{display:none!important}
-.product{border:1px solid #e2e8f0;padding:12px;border-radius:9px;margin:10px 0;overflow-wrap:anywhere}
-.hint{color:#64748b;font-size:13px;line-height:1.8}
+body {
+  font-family: Tahoma, Arial, sans-serif;
+  background: #f1f5f9;
+  color: #172033;
+  margin: 0;
+  padding: 15px;
+}
+main {max-width:950px;margin:auto}
+.box {
+  background:white;
+  padding:18px;
+  margin-bottom:16px;
+  border-radius:12px;
+  box-shadow:0 3px 12px #0001;
+}
+input,textarea,select,button {
+  font:inherit;
+  box-sizing:border-box;
+  width:100%;
+  padding:11px;
+  margin:6px 0 12px;
+  border:1px solid #cbd5e1;
+  border-radius:8px;
+}
+button {
+  background:#2563eb;
+  color:white;
+  border:0;
+  cursor:pointer;
+}
+button:disabled {opacity:.5;cursor:not-allowed}
+.delete {background:#dc2626}
+.green {background:#15803d}
+.gray {background:#64748b}
+.message {
+  padding:12px;
+  border-radius:8px;
+  background:#e0f2fe;
+  margin:12px 0;
+  overflow-wrap:anywhere;
+  white-space:pre-wrap;
+}
+.hidden {display:none!important}
+.product,.order {
+  border:1px solid #e2e8f0;
+  padding:14px;
+  border-radius:10px;
+  margin:12px 0;
+  overflow-wrap:anywhere;
+}
+.hint {color:#64748b;font-size:13px;line-height:1.9}
+.order p {line-height:1.9}
+.status {
+  display:inline-block;
+  padding:5px 10px;
+  border-radius:7px;
+  background:#e2e8f0;
+  margin:5px 0;
+}
+.pending {background:#fef3c7;color:#92400e}
+.confirmed {background:#dcfce7;color:#166534}
+.cancelled {background:#fee2e2;color:#991b1b}
+.map-link {
+  display:block;
+  background:#e0f2fe;
+  color:#075985;
+  text-decoration:none;
+  padding:11px;
+  border-radius:8px;
+  text-align:center;
+  margin:10px 0;
+}
+.actions {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+}
+.actions button {margin:4px 0}
+hr {border:0;border-top:1px solid #e2e8f0}
 </style>
 </head>
+
 <body>
 <main>
+
 <h1>پنل مدیریت الکتریک پلاس</h1>
-<div id="message" class="message">برای مدیریت محصولات وارد حساب مدیر شوید.</div>
+
+<div id="message" class="message">
+برای مدیریت فروشگاه وارد حساب مدیر شوید.
+</div>
 
 <section id="loginBox" class="box">
 <h2>ورود مدیر</h2>
 <form id="loginForm">
 <label>ایمیل مدیر</label>
 <input id="email" type="email" autocomplete="username" required>
+
 <label>رمز عبور</label>
-<input id="password" type="password" autocomplete="current-password" required>
+<input id="password" type="password"
+autocomplete="current-password" required>
+
 <button type="submit">ورود</button>
 </form>
-<p class="hint">از حساب مدیر ثبت‌شده در Supabase استفاده کنید. رمز خود را به کسی ندهید.</p>
+<p class="hint">از حساب مدیر ثبت‌شده در Supabase استفاده کنید.</p>
 </section>
 
 <section id="adminBox" class="hidden">
+
 <div class="box">
-<button id="logoutButton" class="gray" type="button">خروج از حساب</button>
+<button id="logoutButton" class="gray" type="button">
+خروج از حساب
+</button>
+</div>
+
+<!-- ORDERS -->
+<div class="box">
+<h2>📦 مدیریت سفارش‌ها</h2>
+<p class="hint">
+در این قسمت سفارش‌های مشتریان و وضعیت آن‌ها نمایش داده می‌شود.
+</p>
+
+<button id="refreshOrders" type="button">
+بارگذاری سفارش‌ها
+</button>
+
+<div id="orders">در حال بارگذاری...</div>
+</div>
+
+<!-- PRODUCTS -->
+<div class="box">
 <h2 id="formHeading">افزودن محصول جدید</h2>
+
 <form id="productForm">
 <input id="productId" type="hidden">
 
@@ -48,7 +152,7 @@ button{background:#2563eb;color:white;border:0;cursor:pointer}
 <input id="price" type="number" min="0" step="1" required>
 
 <label>دسته‌بندی</label>
-<input id="category" placeholder="مثلاً روشنایی">
+<input id="category">
 
 <label>موجودی</label>
 <input id="stock" type="number" min="0" step="1" value="0">
@@ -57,44 +161,71 @@ button{background:#2563eb;color:white;border:0;cursor:pointer}
 <textarea id="desc" rows="4"></textarea>
 
 <label>نشانی اینترنتی تصویر</label>
-<input id="imag" type="url" placeholder="https://...">
+<input id="imag" type="url">
 
 <label>وضعیت محصول</label>
 <select id="active">
-<option value="true">فعال و قابل نمایش</option>
+<option value="true">فعال</option>
 <option value="false">غیرفعال</option>
 </select>
 
-<button id="saveButton" type="submit">ذخیره محصول</button>
-<button id="cancelButton" type="button" class="gray hidden">لغو ویرایش</button>
+<button id="saveButton" type="submit">
+ذخیره محصول
+</button>
+
+<button id="cancelButton" type="button" class="gray hidden">
+لغو ویرایش
+</button>
 </form>
-<p class="hint">در این نسخه، تصویر با نشانی اینترنتی ثبت می‌شود. آپلود مستقیم عکس را می‌توان جداگانه اضافه کرد.</p>
 </div>
 
 <div class="box">
 <h2>نمایش محصولات</h2>
-<button id="refreshButton" type="button">بارگذاری دوباره</button>
-<div id="products">در حال آماده‌سازی...</div>
+<button id="refreshButton" type="button">
+بارگذاری دوباره محصولات
+</button>
+<div id="products">در حال بارگذاری...</div>
 </div>
+
 </section>
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script>
 (() => {
-  const SUPABASE_URL = 'https://loqivxvhwbkxorsoryyu.supabase.co';
-  const SUPABASE_KEY = 'sb_publishable_SAgY0gPoQaZIFdrc39bWgw_YLreqqie';
-  const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  const SUPABASE_URL =
+    'https://loqivxvhwbkxorsoryyu.supabase.co';
+
+  const SUPABASE_KEY =
+    'sb_publishable_SAgY0gPoQaZIFdrc39bWgw_YLreqqie';
+
+  const db = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
   const $ = id => document.getElementById(id);
 
   function message(text, error=false) {
     $('message').textContent = text;
-    $('message').style.background = error ? '#fee2e2' : '#e0f2fe';
+    $('message').style.background =
+      error ? '#fee2e2' : '#e0f2fe';
   }
 
   function showAdmin(signedIn) {
     $('loginBox').classList.toggle('hidden', signedIn);
     $('adminBox').classList.toggle('hidden', !signedIn);
+  }
+
+  function formatMoney(value) {
+    return Number(value || 0).toLocaleString('fa-IR') + ' تومان';
+  }
+
+  function statusLabel(status) {
+    if (status === 'confirmed') return 'تأیید شده';
+    if (status === 'cancelled') return 'لغو شده';
+    return 'در انتظار بررسی';
   }
 
   function resetForm() {
@@ -107,15 +238,202 @@ button{background:#2563eb;color:white;border:0;cursor:pointer}
     $('cancelButton').classList.add('hidden');
   }
 
+  // LOAD ORDERS
+  async function loadOrders() {
+    $('orders').textContent = 'در حال بارگذاری سفارش‌ها...';
+
+    const {data, error} = await db
+      .from('orders')
+      .select(
+        'id,created_at,customer_name,phone,address,items,total_amount,status,latitude,longitude'
+      )
+      .order('created_at', {ascending:false})
+      .limit(100);
+
+    if (error) {
+      $('orders').textContent =
+        'خطا در دریافت سفارش‌ها: ' + error.message;
+      message('دریافت سفارش‌ها ناموفق بود.', true);
+      return;
+    }
+
+    $('orders').replaceChildren();
+
+    if (!data || data.length === 0) {
+      $('orders').textContent = 'هنوز سفارشی ثبت نشده است.';
+      return;
+    }
+
+    data.forEach(order => {
+      const card = document.createElement('div');
+      card.className = 'order';
+
+      const title = document.createElement('h3');
+      title.textContent =
+        'سفارش شماره ' + String(order.id);
+
+      const status = document.createElement('span');
+      status.className =
+        'status ' + (order.status || 'pending');
+      status.textContent = statusLabel(order.status);
+
+      const customer = document.createElement('p');
+      customer.textContent =
+        'نام مشتری: ' + (order.customer_name || 'ثبت نشده');
+
+      const phone = document.createElement('p');
+      phone.textContent =
+        'تلفن: ' + (order.phone || 'ثبت نشده');
+
+      const address = document.createElement('p');
+      address.textContent =
+        'نشانی: ' + (order.address || 'ثبت نشده');
+
+      const total = document.createElement('p');
+      total.textContent =
+        'مبلغ کل: ' + formatMoney(order.total_amount);
+
+      const date = document.createElement('p');
+      date.textContent =
+        'تاریخ ثبت: ' +
+        (order.created_at
+          ? new Date(order.created_at).toLocaleString('fa-IR')
+          : 'نامشخص');
+
+      const itemsTitle = document.createElement('strong');
+      itemsTitle.textContent = 'محصولات سفارش:';
+
+      const items = document.createElement('ul');
+
+      const orderItems = Array.isArray(order.items)
+        ? order.items
+        : [];
+
+      orderItems.forEach(item => {
+        const li = document.createElement('li');
+        li.textContent =
+          (item.name || 'محصول') +
+          ' | تعداد: ' + Number(item.quantity || 0) +
+          ' | قیمت: ' + formatMoney(item.price);
+        items.appendChild(li);
+      });
+
+      if (orderItems.length === 0) {
+        const li = document.createElement('li');
+        li.textContent = 'اطلاعات محصول موجود نیست.';
+        items.appendChild(li);
+      }
+
+      card.append(
+        title,
+        status,
+        customer,
+        phone,
+        address,
+        total,
+        date,
+        itemsTitle,
+        items
+      );
+
+      // MAP LINK
+      const lat = Number(order.latitude);
+      const lng = Number(order.longitude);
+
+      if (
+        order.latitude !== null &&
+        order.longitude !== null &&
+        Number.isFinite(lat) &&
+        Number.isFinite(lng) &&
+        lat >= -90 && lat <= 90 &&
+        lng >= -180 && lng <= 180
+      ) {
+        const mapLink = document.createElement('a');
+        mapLink.className = 'map-link';
+        mapLink.href =
+          'https://www.openstreetmap.org/?mlat=' +
+          encodeURIComponent(lat) +
+          '&mlon=' + encodeURIComponent(lng) +
+          '#map=16/' + encodeURIComponent(lat) +
+          '/' + encodeURIComponent(lng);
+
+        mapLink.target = '_blank';
+        mapLink.rel = 'noopener noreferrer';
+        mapLink.textContent = '📍 مشاهده محل تحویل روی نقشه';
+        card.appendChild(mapLink);
+      } else {
+        const noMap = document.createElement('p');
+        noMap.className = 'hint';
+        noMap.textContent = 'مختصات نقشه برای این سفارش ثبت نشده است.';
+        card.appendChild(noMap);
+      }
+
+      // STATUS ACTIONS
+      const actions = document.createElement('div');
+      actions.className = 'actions';
+
+      const confirmButton = document.createElement('button');
+      confirmButton.className = 'green';
+      confirmButton.textContent = 'تأیید سفارش';
+      confirmButton.disabled = order.status === 'confirmed';
+
+      confirmButton.addEventListener('click', () => {
+        updateOrderStatus(order.id, 'confirmed');
+      });
+
+      const cancelButton = document.createElement('button');
+      cancelButton.className = 'delete';
+      cancelButton.textContent = 'لغو سفارش';
+      cancelButton.disabled = order.status === 'cancelled';
+
+      cancelButton.addEventListener('click', () => {
+        if (confirm('آیا از لغو این سفارش مطمئن هستید؟')) {
+          updateOrderStatus(order.id, 'cancelled');
+        }
+      });
+
+      actions.append(confirmButton, cancelButton);
+      card.appendChild(actions);
+
+      $('orders').appendChild(card);
+    });
+  }
+
+  // UPDATE ORDER STATUS
+  async function updateOrderStatus(id, status) {
+    message('در حال به‌روزرسانی وضعیت سفارش...');
+
+    const {error} = await db
+      .from('orders')
+      .update({status})
+      .eq('id', id);
+
+    if (error) {
+      message(
+        'تغییر وضعیت انجام نشد: ' + error.message,
+        true
+      );
+      return;
+    }
+
+    message('وضعیت سفارش به‌روزرسانی شد.');
+    await loadOrders();
+  }
+
+  // LOAD PRODUCTS
   async function loadProducts() {
     $('products').textContent = 'در حال بارگذاری محصولات...';
 
-    const {data, error} = await db.from('products')
-      .select('id,name,price,category,stock,desc,imag,is_active,created_at')
+    const {data, error} = await db
+      .from('products')
+      .select(
+        'id,name,price,category,stock,desc,imag,is_active,created_at'
+      )
       .order('created_at', {ascending:false});
 
     if (error) {
-      $('products').textContent = 'خطا در دریافت محصولات: ' + error.message;
+      $('products').textContent =
+        'خطا در دریافت محصولات: ' + error.message;
       message('بارگذاری محصولات ناموفق بود.', true);
       return;
     }
@@ -136,9 +454,9 @@ button{background:#2563eb;color:white;border:0;cursor:pointer}
 
       const details = document.createElement('p');
       details.textContent =
-        'قیمت: ' + Number(p.price || 0).toLocaleString('fa-IR') +
-        ' تومان | دسته‌بندی: ' + (p.category || 'ندارد') +
-        ' | موجودی: ' + Number(p.stock || 0).toLocaleString('fa-IR') +
+        'قیمت: ' + formatMoney(p.price) +
+        ' | دسته‌بندی: ' + (p.category || 'ندارد') +
+        ' | موجودی: ' + Number(p.stock || 0) +
         ' | وضعیت: ' + (p.is_active ? 'فعال' : 'غیرفعال');
 
       const edit = document.createElement('button');
@@ -164,16 +482,22 @@ button{background:#2563eb;color:white;border:0;cursor:pointer}
     $('desc').value = p.desc || '';
     $('imag').value = p.imag || '';
     $('active').value = String(p.is_active !== false);
+
     $('formHeading').textContent = 'ویرایش محصول';
     $('saveButton').textContent = 'ذخیره تغییرات';
     $('cancelButton').classList.remove('hidden');
+
     $('productForm').scrollIntoView({behavior:'smooth'});
   }
 
   async function deleteProduct(p) {
     if (!confirm('محصول «' + p.name + '» حذف شود؟')) return;
 
-    const {error} = await db.from('products').delete().eq('id', p.id);
+    const {error} = await db
+      .from('products')
+      .delete()
+      .eq('id', p.id);
+
     if (error) {
       message('حذف ناموفق بود: ' + error.message, true);
       return;
@@ -183,12 +507,15 @@ button{background:#2563eb;color:white;border:0;cursor:pointer}
     await loadProducts();
   }
 
+  // LOGIN
   $('loginForm').addEventListener('submit', async e => {
     e.preventDefault();
+
     const {error} = await db.auth.signInWithPassword({
       email: $('email').value.trim(),
       password: $('password').value
     });
+
     $('password').value = '';
 
     if (error) {
@@ -198,28 +525,40 @@ button{background:#2563eb;color:white;border:0;cursor:pointer}
 
     showAdmin(true);
     message('ورود موفق بود.');
-    await loadProducts();
+
+    await Promise.all([
+      loadOrders(),
+      loadProducts()
+    ]);
   });
 
+  // LOGOUT
   $('logoutButton').addEventListener('click', async () => {
     const {error} = await db.auth.signOut();
+
     if (error) {
       message('خروج ناموفق بود: ' + error.message, true);
       return;
     }
+
     showAdmin(false);
     resetForm();
     message('از حساب خارج شدید.');
   });
 
+  // SAVE PRODUCT
   $('productForm').addEventListener('submit', async e => {
     e.preventDefault();
 
     const price = Number($('price').value);
     const stock = Number($('stock').value || 0);
 
-    if (!Number.isFinite(price) || price < 0 ||
-        !Number.isInteger(stock) || stock < 0) {
+    if (
+      !Number.isFinite(price) ||
+      price < 0 ||
+      !Number.isInteger(stock) ||
+      stock < 0
+    ) {
       message('قیمت و موجودی را درست وارد کنید.', true);
       return;
     }
@@ -240,6 +579,7 @@ button{background:#2563eb;color:white;border:0;cursor:pointer}
     }
 
     const id = $('productId').value;
+
     const result = id
       ? await db.from('products').update(record).eq('id', id)
       : await db.from('products').insert(record);
@@ -255,20 +595,30 @@ button{background:#2563eb;color:white;border:0;cursor:pointer}
   });
 
   $('refreshButton').addEventListener('click', loadProducts);
+  $('refreshOrders').addEventListener('click', loadOrders);
   $('cancelButton').addEventListener('click', resetForm);
 
+  // CHECK SESSION
   db.auth.getSession().then(async ({data, error}) => {
     if (error) {
       message('بررسی ورود ناموفق بود: ' + error.message, true);
       return;
     }
+
     showAdmin(!!data.session);
-    if (data.session) await loadProducts();
+
+    if (data.session) {
+      await Promise.all([
+        loadOrders(),
+        loadProducts()
+      ]);
+    }
   });
 
   db.auth.onAuthStateChange((_event, session) => {
     showAdmin(!!session);
   });
+
 })();
 </script>
 </body>
