@@ -1,660 +1,108 @@
-
 <!doctype html>
 <html lang="fa" dir="rtl">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>الکتریک پلاس | فروشگاه لوازم برقی</title>
-
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-crossorigin="">
-
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-crossorigin=""></script>
-
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <style>
-*{box-sizing:border-box}
-body{margin:0;font-family:Tahoma,Arial,sans-serif;background:#f4f6fa;color:#172033}
-header,footer{background:#101b35;color:#fff;padding:20px 15px}
-header .inner{max-width:1100px;margin:auto;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
-.logo{font-size:25px;font-weight:bold}
-.logo span{color:#ffc857}
-.tagline,footer p{color:#cbd5e1;font-size:12px;margin-top:8px}
-.cart-button{background:#ffc857;border:0;border-radius:10px;padding:12px;cursor:pointer;font:inherit}
-.hero{background:linear-gradient(135deg,#172b52,#2456a6);color:white;padding:30px 15px;text-align:center}
-.hero p{line-height:2;color:#e1eaff}
-.search{max-width:600px;margin:18px auto}
-.search input{width:100%;padding:14px;border:0;border-radius:10px;font:inherit}
-.container{max-width:1100px;margin:auto;padding:22px 15px}
-.categories{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px}
-.category{padding:10px 13px;border:1px solid #dce2ed;border-radius:22px;background:white;cursor:pointer;font:inherit}
-.category.active{background:#172b52;color:white}
+*{box-sizing:border-box}body{margin:0;font-family:Tahoma,Arial,sans-serif;background:#f4f6fa;color:#172033}
+header,footer{background:#101b35;color:#fff;padding:20px 15px}header .inner{max-width:1100px;margin:auto;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.logo{font-size:25px;font-weight:bold}.logo span{color:#ffc857}.tagline,footer p{color:#cbd5e1;font-size:12px;margin-top:8px}
+button{font:inherit;cursor:pointer}.cart-button{background:#ffc857;border:0;border-radius:10px;padding:12px}
+.hero{background:linear-gradient(135deg,#172b52,#2456a6);color:white;padding:30px 15px;text-align:center}.hero p{line-height:2;color:#e1eaff}
+.search{max-width:600px;margin:18px auto}.search input{width:100%;padding:14px;border:0;border-radius:10px;font:inherit}
+.container{max-width:1100px;margin:auto;padding:22px 15px}.categories{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px}
+.category{padding:10px 13px;border:1px solid #dce2ed;border-radius:22px;background:white}.category.active{background:#172b52;color:white}
 .status{padding:12px;background:#fff5d6;color:#604800;border-radius:10px;font-size:13px;line-height:1.9;margin-bottom:15px}
-.products{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-.product{background:white;border:1px solid #e6eaf1;border-radius:14px;padding:12px;min-width:0;display:flex;flex-direction:column}
-.visual{height:125px;background:#f0f4fb;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:44px;overflow:hidden}
-.visual img{width:100%;height:100%;object-fit:contain}
-.product h3{font-size:14px;line-height:1.8}
-.desc{font-size:12px;color:#64748b;line-height:1.9;overflow-wrap:anywhere}
-.price{color:#1559b7;font-weight:bold;margin:10px 0}
-.add{border:0;background:#1757b5;color:white;border-radius:9px;padding:11px;cursor:pointer;font:inherit}
-.add:disabled{opacity:.5}
+.products{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.product{background:white;border:1px solid #e6eaf1;border-radius:14px;padding:12px;min-width:0;display:flex;flex-direction:column}
+.visual{height:125px;background:#f0f4fb;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:44px;overflow:hidden}.visual img{width:100%;height:100%;object-fit:contain}
+.product h3{font-size:14px;line-height:1.8}.desc{font-size:12px;color:#64748b;line-height:1.9;overflow-wrap:anywhere}
+.price{color:#1559b7;font-weight:bold;margin:10px 0}.add{border:0;background:#1757b5;color:white;border-radius:9px;padding:11px}.add:disabled{opacity:.5}
 .empty{grid-column:1/-1;background:white;text-align:center;padding:25px;border-radius:12px;line-height:2;color:#64748b}
-.benefits{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:28px 0}
-.benefits div{background:white;border-radius:10px;padding:12px 5px;text-align:center;font-size:12px;line-height:2}
-.cart-panel{display:none;position:fixed;inset:0;background:#0009;z-index:1000;justify-content:center;align-items:center;padding:15px}
-.cart-panel.open{display:flex}
+.benefits{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:28px 0}.benefits div{background:white;border-radius:10px;padding:12px 5px;text-align:center;font-size:12px;line-height:2}
+.cart-panel{display:none;position:fixed;inset:0;background:#0009;z-index:1000;justify-content:center;align-items:center;padding:15px}.cart-panel.open{display:flex}
 .cart-box{background:white;border-radius:16px;padding:18px;width:100%;max-width:480px;max-height:92vh;overflow:auto}
-.cart-head{display:flex;justify-content:space-between;align-items:center}
-.cart-item{display:flex;gap:10px;border-bottom:1px solid #ddd;padding:10px 0}
-.cart-info{flex:1;font-size:13px;line-height:2}
-.quantity{display:flex;gap:8px;align-items:center}
-.quantity button,.close{border:0;background:#edf1f7;border-radius:7px;padding:7px 10px;cursor:pointer}
-.total{font-weight:bold;margin:18px 0}
-.checkout{width:100%;border:0;border-radius:9px;background:#16804a;color:white;padding:13px;cursor:pointer;font:inherit}
-.checkout:disabled{opacity:.6;cursor:wait}
-.notice{font-size:12px;color:#64748b;line-height:2}
-.form-title{font-size:16px;margin:22px 0 12px}
-.customer-form label{display:block;font-size:13px;margin:12px 0 6px}
-.customer-form input,.customer-form textarea{width:100%;padding:12px;border:1px solid #d6dce7;border-radius:9px;font:inherit;font-size:14px}
-.customer-form textarea{min-height:85px;resize:vertical}
-#delivery-map{height:260px;width:100%;border-radius:12px;margin-top:10px;border:1px solid #d6dce7;z-index:1}
-.map-button{border:0;border-radius:9px;background:#1757b5;color:white;padding:11px 14px;margin-top:10px;cursor:pointer;font:inherit}
-.map-help{font-size:12px;color:#64748b;line-height:1.9;margin:8px 0}
-.location-status{font-size:12px;color:#17623a;line-height:1.8;margin-top:8px}
-@media(min-width:650px){.products{grid-template-columns:repeat(3,minmax(0,1fr))}}
-@media(min-width:950px){.products{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.cart-head{display:flex;justify-content:space-between;align-items:center}.cart-item{display:flex;gap:10px;border-bottom:1px solid #ddd;padding:10px 0}
+.cart-info{flex:1;font-size:13px;line-height:2}.quantity{display:flex;gap:8px;align-items:center}.quantity button,.close{border:0;background:#edf1f7;border-radius:7px;padding:7px 10px}
+.total{font-weight:bold;margin:18px 0}.checkout{width:100%;border:0;border-radius:9px;background:#16804a;color:white;padding:13px}.checkout:disabled{opacity:.6}
+.notice,.map-help{font-size:12px;color:#64748b;line-height:2}.form-title{font-size:16px;margin:22px 0 12px}
+.customer-form label,.tracking-box label{display:block;font-size:13px;margin:12px 0 6px}
+.customer-form input,.customer-form textarea,.tracking-box input{width:100%;padding:12px;border:1px solid #d6dce7;border-radius:9px;font:inherit;font-size:14px}
+.customer-form textarea{min-height:85px;resize:vertical}#delivery-map{height:260px;width:100%;border-radius:12px;margin-top:10px;border:1px solid #d6dce7;z-index:1}
+.map-button{border:0;border-radius:9px;background:#1757b5;color:white;padding:11px 14px;margin-top:10px}.location-status{font-size:12px;color:#17623a;line-height:1.8;margin-top:8px}
+.tracking-box{background:white;border:1px solid #e6eaf1;border-radius:14px;padding:18px;margin:25px 0;line-height:2}
+#track-button{width:100%;margin-top:15px;padding:12px;border:0;border-radius:9px;background:#1757b5;color:white}
+#tracking-result{margin-top:12px;font-size:14px;line-height:2;overflow-wrap:anywhere}
+@media(min-width:650px){.products{grid-template-columns:repeat(3,minmax(0,1fr))}}@media(min-width:950px){.products{grid-template-columns:repeat(4,minmax(0,1fr))}}
 </style>
 </head>
-
 <body>
-
-<header>
-  <div class="inner">
-    <div>
-      <div class="logo">⚡ الکتریک <span>پلاس</span></div>
-      <div class="tagline">دنیای لوازم برقی، در دسترس شما</div>
-    </div>
-    <button class="cart-button" onclick="openCart()">🛒 سبد خرید <span id="cart-count">۰</span></button>
-  </div>
-</header>
-
-<section class="hero">
-  <h1>به الکتریک پلاس خوش آمدید</h1>
-  <p>لوازم برقی مورد نیاز خانه و محل کارتان را پیدا کنید.<br>محصولات را بررسی کنید و به سبد خرید اضافه کنید.</p>
-  <div class="search">
-    <input id="search" placeholder="🔍 جست‌وجوی محصول..." oninput="renderProducts()">
-  </div>
-</section>
-
+<header><div class="inner"><div><div class="logo">⚡ الکتریک <span>پلاس</span></div><div class="tagline">دنیای لوازم برقی، در دسترس شما</div></div><button class="cart-button" onclick="openCart()">🛒 سبد خرید <span id="cart-count">۰</span></button></div></header>
+<section class="hero"><h1>به الکتریک پلاس خوش آمدید</h1><p>لوازم برقی مورد نیاز خانه و محل کارتان را پیدا کنید.<br>محصولات را بررسی کنید و به سبد خرید اضافه کنید.</p><div class="search"><input id="search" placeholder="🔍 جست‌وجوی محصول..." oninput="renderProducts()"></div></section>
 <main class="container">
-  <h2>دسته‌بندی محصولات</h2>
-  <div id="categories" class="categories"></div>
-
-  <h2>محصولات فروشگاه</h2>
-  <div id="status" class="status">محصولات در حال بارگذاری هستند...</div>
-  <div id="products" class="products"></div>
-
-  <div class="benefits">
-    <div>⚡<br><b>تنوع محصولات</b><br>انتخاب آسان</div>
-    <div>🛒<br><b>سبد خرید</b><br>مدیریت کالاها</div>
-    <div>📞<br><b>پشتیبانی</b><br>ارتباط با فروشگاه</div>
-  </div>
+<h2>دسته‌بندی محصولات</h2><div id="categories" class="categories"></div>
+<h2>محصولات فروشگاه</h2><div id="status" class="status">محصولات در حال بارگذاری هستند...</div><div id="products" class="products"></div>
+<section class="tracking-box"><h2>📦 پیگیری سفارش</h2><p>شماره تلفن و کد پیگیری را وارد کن.</p>
+<label for="tracking-phone">شماره تلفن</label><input id="tracking-phone" type="tel" placeholder="شماره تلفن هنگام ثبت سفارش">
+<label for="tracking-code">کد پیگیری</label><input id="tracking-code" type="text" maxlength="16" placeholder="کد ۱۶ کاراکتری">
+<button id="track-button" onclick="trackOrder()">پیگیری سفارش</button><div id="tracking-result" role="status"></div></section>
+<div class="benefits"><div>⚡<br><b>تنوع محصولات</b><br>انتخاب آسان</div><div>🛒<br><b>سبد خرید</b><br>مدیریت کالاها</div><div>📞<br><b>پشتیبانی</b><br>ارتباط با فروشگاه</div></div>
 </main>
-
-<footer>
-  <b>⚡ الکتریک پلاس</b>
-  <p>فروشگاه لوازم و تجهیزات الکتریکی</p>
-  <p>© الکتریک پلاس</p>
-</footer>
-
-<div id="cart-panel" class="cart-panel" onclick="outsideCart(event)">
-  <div class="cart-box">
-
-    <div class="cart-head">
-      <h2>🛒 سبد خرید</h2>
-      <button class="close" onclick="closeCart()">بستن ✕</button>
-    </div>
-
-    <div id="cart-items"></div>
-    <div id="cart-total" class="total"></div>
-
-    <hr>
-
-    <h3 class="form-title">اطلاعات تحویل سفارش</h3>
-
-    <div class="customer-form">
-      <label for="customer-name">نام و نام خانوادگی</label>
-      <input id="customer-name" type="text" autocomplete="name" placeholder="نام کامل شما">
-
-      <label for="customer-phone">شماره تماس</label>
-      <input id="customer-phone" type="tel" autocomplete="tel" placeholder="شماره تماس">
-
-      <label for="customer-address">نشانی کامل</label>
-      <textarea id="customer-address" autocomplete="street-address" placeholder="استان، شهر، خیابان، کوچه و پلاک"></textarea>
-    </div>
-
-    <h3 class="form-title">📍 انتخاب محل تحویل روی نقشه</h3>
-    <p class="map-help">
-      روی نقشه محل تحویل را انتخاب کن. می‌توانی نشانگر را هم جابه‌جا کنی.
-      برای استفاده از موقعیت فعلی، دکمه زیر را بزن و اجازه دسترسی مرورگر را تأیید کن.
-    </p>
-
-    <button type="button" class="map-button" onclick="locateMe()">موقعیت فعلی من</button>
-
-    <div id="delivery-map"></div>
-    <div id="location-status" class="location-status">هنوز موقعیتی انتخاب نشده است.</div>
-
-    <button id="checkoutBtn" class="checkout" onclick="checkout()">ثبت سفارش</button>
-
-    <p class="notice">
-      ثبت سفارش از طریق سرور انجام می‌شود. پرداخت آنلاین هنوز به درگاه پرداخت متصل نشده است.
-    </p>
-
-  </div>
-</div>
-
+<footer><b>⚡ الکتریک پلاس</b><p>فروشگاه لوازم و تجهیزات الکتریکی</p><p>© الکتریک پلاس</p></footer>
+<div id="cart-panel" class="cart-panel" onclick="outsideCart(event)"><div class="cart-box">
+<div class="cart-head"><h2>🛒 سبد خرید</h2><button class="close" onclick="closeCart()">بستن ✕</button></div>
+<div id="cart-items"></div><div id="cart-total" class="total"></div><hr>
+<h3 class="form-title">اطلاعات تحویل سفارش</h3><div class="customer-form">
+<label for="customer-name">نام و نام خانوادگی</label><input id="customer-name" autocomplete="name" placeholder="نام کامل شما">
+<label for="customer-phone">شماره تماس</label><input id="customer-phone" type="tel" autocomplete="tel" placeholder="شماره تماس">
+<label for="customer-address">نشانی کامل</label><textarea id="customer-address" autocomplete="street-address" placeholder="استان، شهر، خیابان، کوچه و پلاک"></textarea></div>
+<h3 class="form-title">📍 انتخاب محل تحویل روی نقشه</h3><p class="map-help">روی نقشه محل تحویل را انتخاب کن یا از موقعیت فعلی استفاده کن.</p>
+<button type="button" class="map-button" onclick="locateMe()">موقعیت فعلی من</button><div id="delivery-map"></div><div id="location-status" class="location-status">هنوز موقعیتی انتخاب نشده است.</div>
+<button id="checkoutBtn" class="checkout" onclick="checkout()">ثبت سفارش</button><p class="notice">پرداخت آنلاین هنوز به درگاه پرداخت متصل نشده است.</p>
+</div></div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 "use strict";
-
-const SUPABASE_URL = "https://loqivxvhwbkxorsoryyu.supabase.co";
-const SUPABASE_KEY = "sb_publishable_SAgY0gPoQaZIFdrc39bWgw_YLreqqie";
-
-const staticProducts = [
-  {id:"static-1",name:"لامپ LED کم‌مصرف",category:"روشنایی",icon:"💡",description:"لامپ مناسب روشنایی خانه",price:85000,stock:20},
-  {id:"static-2",name:"چراغ سقفی",category:"روشنایی",icon:"🔆",description:"چراغ مناسب فضای داخلی",price:350000,stock:10},
-  {id:"static-3",name:"سیم برق",category:"سیم و کابل",icon:"〰️",description:"سیم برق برای مصارف عمومی",price:45000,stock:30},
-  {id:"static-4",name:"کابل برق",category:"سیم و کابل",icon:"🔌",description:"کابل برق برای کاربردهای مناسب",price:120000,stock:15},
-  {id:"static-5",name:"فازمتر",category:"ابزار",icon:"🪛",description:"ابزار بررسی وجود ولتاژ",price:65000,stock:12},
-  {id:"static-6",name:"انبردست",category:"ابزار",icon:"🧰",description:"ابزار دستی عمومی",price:180000,stock:8},
-  {id:"static-7",name:"کلید برق",category:"برقی",icon:"🔘",description:"کلید روشنایی ساختمان",price:55000,stock:25},
-  {id:"static-8",name:"پریز برق",category:"برقی",icon:"🔌",description:"پریز برق خانگی",price:75000,stock:25}
-];
-
-let products = [...staticProducts];
-let db = null;
-let selectedCategory = "همه";
-let cart = {};
-let checkoutInProgress = false;
-
-let deliveryMap = null;
-let deliveryMarker = null;
-let selectedLocation = null;
-
-const fmt = n => new Intl.NumberFormat("fa-IR").format(Number(n) || 0);
-const price = n => fmt(n) + " تومان";
-
-function esc(v) {
-  return String(v ?? "").replace(/[&<>"']/g, c => ({
-    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
-  }[c]));
-}
-
-function imageURL(v) {
-  try {
-    const u = new URL(String(v || ""), location.href);
-    return /^https?:$/.test(u.protocol) ? u.href : "";
-  } catch(e) {
-    return "";
-  }
-}
-
-function normalize(r) {
-  return {
-    id:"db-" + String(r.id),
-    name:r.name || "محصول بدون نام",
-    category:r.category || "سایر محصولات",
-    description:r.description || r.desc || "",
-    image:imageURL(r.image_url || r.imag),
-    icon:"📦",
-    price:Number(r.price) || 0,
-    stock:Math.max(0, Number(r.stock) || 0)
-  };
-}
-
-function renderCategories() {
-  const el = document.getElementById("categories");
-  const cats = [...new Set(products.map(p => p.category).filter(Boolean))];
-  el.innerHTML = "";
-
-  const all = document.createElement("button");
-  all.className = "category";
-  all.textContent = "همه محصولات";
-  all.onclick = () => setCategory("همه", all);
-  el.appendChild(all);
-
-  cats.forEach(c => {
-    const x = document.createElement("button");
-    x.className = "category";
-    x.textContent = c;
-    x.onclick = () => setCategory(c, x);
-    el.appendChild(x);
-  });
-
-  const buttons = [...el.querySelectorAll("button")];
-  let active = selectedCategory === "همه"
-    ? buttons[0]
-    : buttons.find(x => x.textContent === selectedCategory);
-
-  if (!active) {
-    selectedCategory = "همه";
-    active = buttons[0];
-  }
-  if (active) active.classList.add("active");
-}
-
-function renderProducts() {
-  const q = document.getElementById("search").value.trim().toLocaleLowerCase("fa");
-  const el = document.getElementById("products");
-
-  const list = products.filter(p =>
-    (selectedCategory === "همه" || p.category === selectedCategory) &&
-    (`${p.name} ${p.description} ${p.category}`.toLocaleLowerCase("fa").includes(q))
-  );
-
-  if (!list.length) {
-    el.innerHTML = '<div class="empty">محصولی پیدا نشد.</div>';
-    return;
-  }
-
-  el.innerHTML = list.map(p => {
-    const visual = p.image
-      ? `<img src="${esc(p.image)}" alt="${esc(p.name)}" loading="lazy" onerror="this.style.display='none';this.parentElement.textContent='📦'">`
-      : esc(p.icon || "📦");
-
-    return `
-      <article class="product">
-        <div class="visual">${visual}</div>
-        <h3>${esc(p.name)}</h3>
-        <div class="desc">${esc(p.description)}</div>
-        <div class="desc">دسته‌بندی: ${esc(p.category)}</div>
-        <div class="desc">موجودی: ${fmt(p.stock)}</div>
-        <div class="price">${price(p.price)}</div>
-        <button class="add" onclick="addToCart('${esc(p.id)}')" ${p.stock <= 0 ? "disabled" : ""}>
-          ${p.stock <= 0 ? "ناموجود" : "افزودن به سبد خرید +"}
-        </button>
-      </article>`;
-  }).join("");
-}
-
-function setCategory(c, b) {
-  selectedCategory = c;
-  document.querySelectorAll(".category").forEach(x => x.classList.remove("active"));
-  b.classList.add("active");
-  renderProducts();
-}
-
-function addToCart(id) {
-  const p = products.find(x => x.id === String(id));
-  if (!p) return;
-
-  if ((cart[id] || 0) >= p.stock) {
-    alert("تعداد انتخاب‌شده بیشتر از موجودی محصول است.");
-    return;
-  }
-
-  cart[id] = (cart[id] || 0) + 1;
-  updateCart();
-}
-
-function changeQuantity(id, d) {
-  const p = products.find(x => x.id === String(id));
-
-  if (!p) {
-    delete cart[id];
-    updateCart();
-    return;
-  }
-
-  const n = (cart[id] || 0) + d;
-
-  if (n <= 0) delete cart[id];
-  else if (n > p.stock) {
-    alert("موجودی کافی نیست.");
-    return;
-  } else {
-    cart[id] = n;
-  }
-
-  updateCart();
-}
-
-function updateCart() {
-  Object.keys(cart).forEach(id => {
-    if (!products.some(p => p.id === id)) delete cart[id];
-  });
-
-  document.getElementById("cart-count").textContent =
-    fmt(Object.values(cart).reduce((a,b) => a+b, 0));
-
-  const items = products.filter(p => cart[p.id]);
-
-  document.getElementById("cart-items").innerHTML = items.length
-    ? items.map(p => `
-      <div class="cart-item">
-        <div>${p.image ? `<img src="${esc(p.image)}" alt="" width="42">` : esc(p.icon || "📦")}</div>
-        <div class="cart-info">
-          <b>${esc(p.name)}</b><br>
-          ${price(p.price)}
-          <div class="quantity">
-            <button onclick="changeQuantity('${esc(p.id)}',1)">+</button>
-            <span>${fmt(cart[p.id])}</span>
-            <button onclick="changeQuantity('${esc(p.id)}',-1)">−</button>
-          </div>
-        </div>
-      </div>`).join("")
-    : "<p>سبد خرید شما خالی است.</p>";
-
-  document.getElementById("cart-total").textContent =
-    "مجموع: " + price(items.reduce((s,p) => s + p.price * cart[p.id], 0));
-}
-
-/* باز کردن سبد خرید و آماده‌سازی نقشه */
-function openCart() {
-  document.getElementById("cart-panel").classList.add("open");
-
-  setTimeout(() => {
-    initializeMap();
-    if (deliveryMap) deliveryMap.invalidateSize();
-  }, 250);
-}
-
-function closeCart() {
-  document.getElementById("cart-panel").classList.remove("open");
-}
-
-function outsideCart(e) {
-  if (e.target.id === "cart-panel") closeCart();
-}
-
-/* ساخت نقشه */
-function initializeMap() {
-  if (deliveryMap) {
-    deliveryMap.invalidateSize();
-    return;
-  }
-
-  if (!window.L) {
-    document.getElementById("location-status").textContent =
-      "نقشه بارگذاری نشد. اتصال اینترنت را بررسی کن.";
-    return;
-  }
-
-  // نمای اولیه نقشه؛ مشتری باید محل دقیق را خودش انتخاب کند.
-  deliveryMap = L.map("delivery-map").setView([32, 53], 5);
-
-  L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    maxZoom: 19,
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-  }).addTo(deliveryMap);
-
-  deliveryMap.on("click", function(e) {
-    setDeliveryLocation(e.latlng.lat, e.latlng.lng);
-  });
-}
-
-/* ثبت نقطه انتخاب‌شده روی نقشه */
-function setDeliveryLocation(lat, lng) {
-  if (!Number.isFinite(lat) || !Number.isFinite(lng)) return;
-
-  selectedLocation = {
-    latitude: lat,
-    longitude: lng
-  };
-
-  if (!deliveryMap) initializeMap();
-  if (!deliveryMap) return;
-
-  if (!deliveryMarker) {
-    deliveryMarker = L.marker([lat, lng], {
-      draggable: true
-    }).addTo(deliveryMap);
-
-    deliveryMarker.on("dragend", function() {
-      const pos = deliveryMarker.getLatLng();
-      setDeliveryLocation(pos.lat, pos.lng);
-    });
-  } else {
-    deliveryMarker.setLatLng([lat, lng]);
-  }
-
-  document.getElementById("location-status").textContent =
-    "موقعیت انتخاب شد: " +
-    lat.toFixed(6) + " , " + lng.toFixed(6);
-}
-
-/* دریافت موقعیت فعلی با اجازه کاربر */
-function locateMe() {
-  if (!navigator.geolocation) {
-    alert("مرورگر شما امکان تشخیص موقعیت را ندارد.");
-    return;
-  }
-
-  initializeMap();
-
-  if (!deliveryMap) {
-    alert("نقشه هنوز آماده نشده است.");
-    return;
-  }
-
-  document.getElementById("location-status").textContent =
-    "در حال دریافت موقعیت فعلی...";
-
-  navigator.geolocation.getCurrentPosition(
-    function(position) {
-      const lat = position.coords.latitude;
-      const lng = position.coords.longitude;
-
-      setDeliveryLocation(lat, lng);
-      deliveryMap.setView([lat, lng], 16);
-    },
-    function(error) {
-      let message = "دریافت موقعیت ناموفق بود.";
-
-      if (error.code === 1) {
-        message = "اجازه دسترسی به موقعیت داده نشد.";
-      } else if (error.code === 2) {
-        message = "موقعیت فعلی قابل تشخیص نیست.";
-      } else if (error.code === 3) {
-        message = "زمان دریافت موقعیت تمام شد.";
-      }
-
-      document.getElementById("location-status").textContent = message;
-      alert(message);
-    },
-    {
-      enableHighAccuracy: true,
-      timeout: 15000,
-      maximumAge: 0
-    }
-  );
-}
-
-/* ثبت سفارش */
-async function checkout() {
-  if (checkoutInProgress) return;
-
-  const entries = Object.entries(cart);
-
-  if (!entries.length) {
-    alert("سبد خرید شما خالی است.");
-    return;
-  }
-
-  // محصولات نمونه شناسه دیتابیس ندارند.
-  const items = [];
-
-  for (const [cartId, quantity] of entries) {
-    const match = String(cartId).match(/^db-(\d+)$/);
-
-    if (!match) {
-      alert(
-        "محصول «" +
-        (products.find(p => p.id === cartId)?.name || "") +
-        "» محصول نمونه است و در دیتابیس ثبت نشده است. برای سفارش، محصول ثبت‌شده در پنل مدیریت را انتخاب کن."
-      );
-      return;
-    }
-
-    items.push({
-      id: Number(match[1]),
-      quantity: Number(quantity)
-    });
-  }
-
-  const customer_name = document.getElementById("customer-name").value.trim();
-  const phone = document.getElementById("customer-phone").value.trim();
-  const address = document.getElementById("customer-address").value.trim();
-
-  if (!customer_name || !phone || !address) {
-    alert("لطفاً نام، شماره تماس و نشانی کامل را وارد کن.");
-    return;
-  }
-
-  if (!selectedLocation) {
-    alert("لطفاً محل تحویل را روی نقشه انتخاب کن.");
-    return;
-  }
-
-  const button = document.getElementById("checkoutBtn");
-
-  checkoutInProgress = true;
-  button.disabled = true;
-  button.textContent = "در حال ثبت سفارش...";
-
-  try {
-    const response = await fetch(
-      `${SUPABASE_URL}/functions/v1/submit-order`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "apikey": SUPABASE_KEY
-        },
-        body: JSON.stringify({
-          customer_name,
-          phone,
-          address,
-          latitude: selectedLocation.latitude,
-          longitude: selectedLocation.longitude,
-          items
-        })
-      }
-    );
-
-    const responseText = await response.text();
-    let result = {};
-
-    try {
-      result = responseText ? JSON.parse(responseText) : {};
-    } catch (_) {
-      result = { message: responseText };
-    }
-
-    if (!response.ok) {
-      throw new Error(
-        result.error ||
-        result.message ||
-        "خطا در ثبت سفارش. کد خطا: " + response.status
-      );
-    }
-
-    if (!result.success) {
-      throw new Error(result.error || "پاسخ سرور موفقیت‌آمیز نبود.");
-    }
-
-    alert("سفارش شما با موفقیت ثبت شد.");
-
-    cart = {};
-    updateCart();
-
-    document.getElementById("customer-name").value = "";
-    document.getElementById("customer-phone").value = "";
-    document.getElementById("customer-address").value = "";
-
-    selectedLocation = null;
-
-    if (deliveryMarker && deliveryMap) {
-      deliveryMap.removeLayer(deliveryMarker);
-      deliveryMarker = null;
-    }
-
-    document.getElementById("location-status").textContent =
-      "هنوز موقعیتی انتخاب نشده است.";
-
-    closeCart();
-
-  } catch (error) {
-    console.error("Checkout error:", error);
-    alert("ثبت سفارش انجام نشد:\n" + (error.message || "خطای نامشخص"));
-  } finally {
-    checkoutInProgress = false;
-    button.disabled = false;
-    button.textContent = "ثبت سفارش";
-  }
-}
-
-/* دریافت محصولات از Supabase */
-async function loadDatabaseProducts() {
-  const status = document.getElementById("status");
-
-  try {
-    const lib = await new Promise((resolve, reject) => {
-      if (window.supabase?.createClient) return resolve(window.supabase);
-
-      const s = document.createElement("script");
-      s.src = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
-
-      s.onload = () => window.supabase?.createClient
-        ? resolve(window.supabase)
-        : reject(Error("کتابخانه Supabase بارگذاری نشد."));
-
-      s.onerror = () => reject(Error("دریافت کتابخانه Supabase ناموفق بود."));
-
-      document.head.appendChild(s);
-    });
-
-    db = lib.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-    const { data, error } = await db
-      .from("products")
-      .select("*")
-      .eq("is_active", true)
-      .order("created_at", { ascending: false });
-
-    if (error) throw error;
-
-    const dynamic = (data || []).map(normalize);
-    products = [...dynamic, ...staticProducts];
-
-    status.textContent = dynamic.length
-      ? `اتصال برقرار شد؛ ${fmt(dynamic.length)} محصول ثبت‌شده به‌علاوه ۸ محصول نمونه نمایش داده می‌شوند.`
-      : "اتصال برقرار شد، اما محصول فعالی در جدول نیست؛ ۸ محصول نمونه نمایش داده می‌شوند.";
-
-    status.style.background = "#e8f7ed";
-    status.style.color = "#17623a";
-
-  } catch (err) {
-    console.error("Supabase fetch error:", err);
-
-    products = [...staticProducts];
-
-    status.textContent =
-      "دریافت محصولات ثبت‌شده ناموفق بود؛ محصولات نمونه نمایش داده می‌شوند. دسترسی خواندن جدول products را بررسی کن.";
-  }
-
-  renderCategories();
-  renderProducts();
-  updateCart();
-}
-
-renderCategories();
-renderProducts();
-updateCart();
-loadDatabaseProducts();
+const SUPABASE_URL="https://loqivxvhwbkxorsoryyu.supabase.co";
+const SUPABASE_KEY="sb_publishable_SAgY0gPoQaZIFdrc39bWgw_YLreqqie";
+const staticProducts=[
+{id:"static-1",name:"لامپ LED کم‌مصرف",category:"روشنایی",icon:"💡",description:"لامپ مناسب روشنایی خانه",price:85000,stock:20},
+{id:"static-2",name:"چراغ سقفی",category:"روشنایی",icon:"🔆",description:"چراغ مناسب فضای داخلی",price:350000,stock:10},
+{id:"static-3",name:"سیم برق",category:"سیم و کابل",icon:"〰️",description:"سیم برق برای مصارف عمومی",price:45000,stock:30},
+{id:"static-4",name:"کابل برق",category:"سیم و کابل",icon:"🔌",description:"کابل برق برای کاربردهای مناسب",price:120000,stock:15},
+{id:"static-5",name:"فازمتر",category:"ابزار",icon:"🪛",description:"ابزار بررسی وجود ولتاژ",price:65000,stock:12},
+{id:"static-6",name:"انبردست",category:"ابزار",icon:"🧰",description:"ابزار دستی عمومی",price:180000,stock:8},
+{id:"static-7",name:"کلید برق",category:"برقی",icon:"🔘",description:"کلید روشنایی ساختمان",price:55000,stock:25},
+{id:"static-8",name:"پریز برق",category:"برقی",icon:"🔌",description:"پریز برق خانگی",price:75000,stock:25}];
+let products=[...staticProducts],db=null,selectedCategory="همه",cart={},checkoutInProgress=false;
+let deliveryMap=null,deliveryMarker=null,selectedLocation=null;
+const fmt=n=>new Intl.NumberFormat("fa-IR").format(Number(n)||0),price=n=>fmt(n)+" تومان";
+function esc(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+function imageURL(v){try{const u=new URL(String(v||""),location.href);return /^https?:$/.test(u.protocol)?u.href:"";}catch(e){return "";}}
+function normalize(r){return{id:"db-"+String(r.id),name:r.name||"محصول بدون نام",category:r.category||"سایر محصولات",description:r.description||r.desc||"",image:imageURL(r.image_url||r.imag),icon:"📦",price:Number(r.price)||0,stock:Math.max(0,Number(r.stock)||0)};}
+function renderCategories(){const el=document.getElementById("categories"),cats=[...new Set(products.map(p=>p.category).filter(Boolean))];el.innerHTML="";[["همه","همه محصولات"],...cats.map(c=>[c,c])].forEach(([v,t])=>{const b=document.createElement("button");b.className="category"+(selectedCategory===v?" active":"");b.textContent=t;b.onclick=()=>{selectedCategory=v;renderCategories();renderProducts();};el.appendChild(b);});}
+function renderProducts(){const q=document.getElementById("search").value.trim().toLocaleLowerCase("fa"),el=document.getElementById("products"),list=products.filter(p=>(selectedCategory==="همه"||p.category===selectedCategory)&&(`${p.name} ${p.description} ${p.category}`.toLocaleLowerCase("fa").includes(q)));
+if(!list.length){el.innerHTML='<div class="empty">محصولی پیدا نشد.</div>';return;}
+el.innerHTML=list.map(p=>`<article class="product"><div class="visual">${p.image?`<img src="${esc(p.image)}" alt="${esc(p.name)}" loading="lazy">`:esc(p.icon||"📦")}</div><h3>${esc(p.name)}</h3><div class="desc">${esc(p.description)}</div><div class="desc">دسته‌بندی: ${esc(p.category)}</div><div class="desc">موجودی: ${fmt(p.stock)}</div><div class="price">${price(p.price)}</div><button class="add" onclick="addToCart('${esc(p.id)}')" ${p.stock<=0?"disabled":""}>${p.stock<=0?"ناموجود":"افزودن به سبد خرید +"}</button></article>`).join("");}
+function addToCart(id){const p=products.find(x=>x.id===id);if(!p)return;if((cart[id]||0)>=p.stock){alert("تعداد انتخاب‌شده بیشتر از موجودی محصول است.");return;}cart[id]=(cart[id]||0)+1;updateCart();}
+function changeQuantity(id,d){const p=products.find(x=>x.id===id);if(!p){delete cart[id];updateCart();return;}const n=(cart[id]||0)+d;if(n<=0)delete cart[id];else if(n>p.stock){alert("موجودی کافی نیست.");return;}else cart[id]=n;updateCart();}
+function updateCart(){Object.keys(cart).forEach(id=>{if(!products.some(p=>p.id===id))delete cart[id];});document.getElementById("cart-count").textContent=fmt(Object.values(cart).reduce((a,b)=>a+b,0));const items=products.filter(p=>cart[p.id]);document.getElementById("cart-items").innerHTML=items.length?items.map(p=>`<div class="cart-item"><div>${p.image?`<img src="${esc(p.image)}" alt="" width="42">`:esc(p.icon||"📦")}</div><div class="cart-info"><b>${esc(p.name)}</b><br>${price(p.price)}<div class="quantity"><button onclick="changeQuantity('${esc(p.id)}',1)">+</button><span>${fmt(cart[p.id])}</span><button onclick="changeQuantity('${esc(p.id)}',-1)">−</button></div></div></div>`).join(""):"<p>سبد خرید شما خالی است.</p>";document.getElementById("cart-total").textContent="مجموع: "+price(items.reduce((s,p)=>s+p.price*cart[p.id],0));}
+function openCart(){document.getElementById("cart-panel").classList.add("open");setTimeout(()=>{initializeMap();if(deliveryMap)deliveryMap.invalidateSize();},250);}
+function closeCart(){document.getElementById("cart-panel").classList.remove("open");}
+function outsideCart(e){if(e.target.id==="cart-panel")closeCart();}
+function initializeMap(){if(deliveryMap){deliveryMap.invalidateSize();return;}if(!window.L){document.getElementById("location-status").textContent="نقشه بارگذاری نشد.";return;}deliveryMap=L.map("delivery-map").setView([32,53],5);L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19,attribution:'&copy; OpenStreetMap'}).addTo(deliveryMap);deliveryMap.on("click",e=>setDeliveryLocation(e.latlng.lat,e.latlng.lng));}
+function setDeliveryLocation(lat,lng){if(!Number.isFinite(lat)||!Number.isFinite(lng))return;selectedLocation={latitude:lat,longitude:lng};if(!deliveryMap)initializeMap();if(!deliveryMap)return;if(!deliveryMarker){deliveryMarker=L.marker([lat,lng],{draggable:true}).addTo(deliveryMap);deliveryMarker.on("dragend",()=>{const p=deliveryMarker.getLatLng();setDeliveryLocation(p.lat,p.lng);});}else deliveryMarker.setLatLng([lat,lng]);document.getElementById("location-status").textContent="موقعیت انتخاب شد: "+lat.toFixed(6)+" , "+lng.toFixed(6);}
+function locateMe(){if(!navigator.geolocation){alert("مرورگر امکان تشخیص موقعیت را ندارد.");return;}initializeMap();if(!deliveryMap)return;document.getElementById("location-status").textContent="در حال دریافت موقعیت...";navigator.geolocation.getCurrentPosition(pos=>{const lat=pos.coords.latitude,lng=pos.coords.longitude;setDeliveryLocation(lat,lng);deliveryMap.setView([lat,lng],16);},err=>{const m=err.code===1?"اجازه دسترسی به موقعیت داده نشد.":"دریافت موقعیت ناموفق بود.";document.getElementById("location-status").textContent=m;alert(m);},{enableHighAccuracy:true,timeout:15000,maximumAge:0});}
+async function checkout(){if(checkoutInProgress)return;const entries=Object.entries(cart);if(!entries.length){alert("سبد خرید خالی است.");return;}const items=[];for(const [cartId,quantity] of entries){const match=String(cartId).match(/^db-(.+)$/);if(!match){alert("محصول نمونه قابل سفارش نیست؛ محصول ثبت‌شده در پنل را انتخاب کن.");return;}items.push({product_id:"db-"+match[1],quantity:Number(quantity)});}
+const customer_name=document.getElementById("customer-name").value.trim(),phone=document.getElementById("customer-phone").value.trim(),address=document.getElementById("customer-address").value.trim();
+if(!customer_name||!phone||!address){alert("نام، شماره تماس و نشانی را وارد کن.");return;}if(!selectedLocation){alert("محل تحویل را روی نقشه انتخاب کن.");return;}
+const button=document.getElementById("checkoutBtn");checkoutInProgress=true;button.disabled=true;button.textContent="در حال ثبت سفارش...";
+try{const response=await fetch(`${SUPABASE_URL}/functions/v1/submit-order`,{method:"POST",headers:{"Content-Type":"application/json","apikey":SUPABASE_KEY},body:JSON.stringify({customer_name,phone,address,latitude:selectedLocation.latitude,longitude:selectedLocation.longitude,items})});const result=await response.json();if(!response.ok||!result.success)throw new Error(result.error||"ثبت سفارش ناموفق بود.");if(!result.tracking_code)throw new Error("کد پیگیری از سرور دریافت نشد. سفارش ثبت شده است؛ با پشتیبانی تماس بگیر.");alert("سفارش با موفقیت ثبت شد.\n\nکد پیگیری شما:\n"+result.tracking_code+"\n\nاین کد را نگه دار.");cart={};updateCart();["customer-name","customer-phone","customer-address"].forEach(id=>document.getElementById(id).value="");selectedLocation=null;if(deliveryMarker&&deliveryMap){deliveryMap.removeLayer(deliveryMarker);deliveryMarker=null;}document.getElementById("location-status").textContent="هنوز موقعیتی انتخاب نشده است.";closeCart();
+}catch(e){console.error(e);alert("ثبت سفارش: "+(e.message||"خطای نامشخص"));}finally{checkoutInProgress=false;button.disabled=false;button.textContent="ثبت سفارش";}}
+async function trackOrder(){const phone=document.getElementById("tracking-phone").value.trim(),tracking_code=document.getElementById("tracking-code").value.trim().toUpperCase(),box=document.getElementById("tracking-result"),button=document.getElementById("track-button");if(!phone||!tracking_code){box.textContent="شماره تلفن و کد پیگیری را وارد کن.";return;}if(!/^[A-F0-9]{16}$/.test(tracking_code)){box.textContent="کد پیگیری باید ۱۶ کاراکتر باشد.";return;}button.disabled=true;button.textContent="در حال بررسی...";box.textContent="";try{const r=await fetch(`${SUPABASE_URL}/functions/v1/track-order`,{method:"POST",headers:{"Content-Type":"application/json","apikey":SUPABASE_KEY},body:JSON.stringify({phone,tracking_code})});const d=await r.json();if(!r.ok||!d.success)throw new Error(d.error||"سفارش پیدا نشد.");box.textContent="وضعیت سفارش: "+(d.status_label||"نامشخص");}catch(e){box.textContent=e.message||"خطا در پیگیری سفارش.";}finally{button.disabled=false;button.textContent="پیگیری سفارش";}}
+async function loadDatabaseProducts(){const status=document.getElementById("status");try{const lib=await new Promise((resolve,reject)=>{if(window.supabase?.createClient)return resolve(window.supabase);const s=document.createElement("script");s.src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";s.onload=()=>window.supabase?.createClient?resolve(window.supabase):reject(Error("کتابخانه Supabase بارگذاری نشد."));s.onerror=()=>reject(Error("دریافت کتابخانه ناموفق بود."));document.head.appendChild(s);});db=lib.createClient(SUPABASE_URL,SUPABASE_KEY);const {data,error}=await db.from("products").select("*").eq("is_active",true).order("created_at",{ascending:false});if(error)throw error;const dynamic=(data||[]).map(normalize);products=[...dynamic,...staticProducts];status.textContent=dynamic.length?`اتصال برقرار شد؛ ${fmt(dynamic.length)} محصول ثبت‌شده نمایش داده می‌شود.`:"اتصال برقرار شد، اما محصول فعالی در جدول نیست؛ محصولات نمونه نمایش داده می‌شوند.";status.style.background="#e8f7ed";status.style.color="#17623a";}catch(err){console.error(err);products=[...staticProducts];status.textContent="دریافت محصولات ثبت‌شده ناموفق بود؛ محصولات نمونه نمایش داده می‌شوند.";}renderCategories();renderProducts();updateCart();}
+renderCategories();renderProducts();updateCart();loadDatabaseProducts();
 </script>
-
 </body>
 </html>
